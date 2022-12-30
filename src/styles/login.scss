@@ -1,0 +1,20 @@
+.login-submit {
+  width: 100%;
+  height: 45px !important;
+  border: 1px solid #4363ec;
+  background: #4363ec;
+  font-size: 18px !important;
+  letter-spacing: 2px;
+  font-weight: 300;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 20px;
+  font-family: "PingFang SC" !important;
+  transition: 0.25s;
+
+  &:hover {
+    background-color: #6982f0;
+    color: #fff;
+    border-color: #6982f0;
+  }
+}
