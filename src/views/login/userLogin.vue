@@ -72,12 +72,19 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      getLogin(loginForm.value).then((res) => {
-        console.log(res);
-        ElMessage({
-          message: res,
-          type: "success",
-        });
+      getLogin(loginForm.value).then((res:number) => {
+        console.log(res)
+        if (res > 0) {
+          ElMessage({
+            message: '登录成功',
+            type: "success",
+          });
+        } else {
+          ElMessage({
+            message: res ? '验证码错误' : '用户名或密码错误',
+            type: "error",
+          });
+        }
       });
     } else {
       console.log("error submit!", fields);

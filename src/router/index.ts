@@ -1,4 +1,6 @@
+import { App } from 'vue';
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { useUserStore } from '@/store';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -24,15 +26,19 @@ const routes: Array<RouteRecordRaw> = [
   },
 ];
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHistory(),
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.path === "/" && from.path !== null) {
-    next({ path: "/login" });
-  } else next();
-});
-
-export default router;
+export const setupRouter = (app: App) => {
+	const userStore = useUserStore();
+  const { loginState } = userStore;
+	router.beforeEach((to, from, next) => {
+    console.log(to)
+    if (to.path !== "/login" && !loginState) {
+      next({ path: "/login" });
+    } else next();
+  });
+	app.use(router);
+};
