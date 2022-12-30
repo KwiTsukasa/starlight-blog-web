@@ -11,7 +11,7 @@
           <div class="login-type">
             <el-tabs v-model="activeName">
               <el-tab-pane label="密码登陆" name="user"></el-tab-pane>
-              <el-tab-pane label="短信登陆" name="iphone"></el-tab-pane>
+              <el-tab-pane label="账号注册" name="iphone"></el-tab-pane>
             </el-tabs>
           </div>
           <user-login v-if="activeName === 'user'"></user-login>
