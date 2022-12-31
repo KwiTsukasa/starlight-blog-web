@@ -1,20 +1,27 @@
 <template>
   <el-form
-    class="login-form"
-    ref="loginFormRef"
-    :model="loginForm"
-    :rules="loginRules"
+    class="register-form"
+    ref="registerFormRef"
+    :model="registerForm"
+    :rules="registerRules"
   >
     <el-form-item prop="username">
       <el-input
-        v-model="loginForm.username"
+        v-model="registerForm.username"
         :prefix-icon="User"
         placeholder="请输入用户名"
       ></el-input>
     </el-form-item>
+    <el-form-item prop="useremail">
+      <el-input
+        v-model="registerForm.useremail"
+        :prefix-icon="Message"
+        placeholder="请输入邮箱"
+      ></el-input>
+    </el-form-item>
     <el-form-item prop="password">
       <el-input
-        v-model="loginForm.password"
+        v-model="registerForm.password"
         :prefix-icon="Lock"
         type="password"
         show-password
@@ -24,7 +31,7 @@
     </el-form-item>
     <el-form-item prop="code">
       <el-input
-        v-model="loginForm.code"
+        v-model="registerForm.code"
         :prefix-icon="Pointer"
         placeholder="请输入验证码"
       >
@@ -37,7 +44,7 @@
       <el-button
         type="primary"
         class="login-submit"
-        @click="submitForm(loginFormRef)"
+        @click="submitForm(registerFormRef)"
       >
         登录
       </el-button>
@@ -47,46 +54,57 @@
 
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import { User, Lock, Pointer } from "@element-plus/icons-vue";
+import { User, Lock, Pointer, Message } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
-import { getLogin } from "@/apis/login";
-import { router } from "@/router";
-import { useUserStore } from '@/store';
+import { getRegister } from "@/apis/login";
 
 const codeImg = ref<string>("/api/user/getImage?rand=" + Math.random());
 const changeCode = () => {
   codeImg.value = "/api/user/getImage?rand=" + Math.random();
 };
 
-const loginFormRef = reactive<FormInstance>(null);
-const loginForm = ref<LoginForm>({
+const registerFormRef = reactive<FormInstance>(null);
+const registerForm = ref<RegisterForm>({
   username: "",
+  useremail: "",
   password: "",
   code: "",
 });
-const loginRules: FormRules = {
+const validateEmail = (rule: any, value: any, callback: any) => {
+  const regExp = /^([a-zA-Z0-9]+[-_\.]?)+@[a-zA-Z0-9]+\.[a-z]+$/;
+  if (regExp.test(value)) {
+    callback();
+  }
+  callback(new Error("请输入正确的邮箱地址"));
+};
+const registerRules: FormRules = {
   username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+  useremail: [
+    { required: true, message: "请输入用户名", trigger: "blur" },
+    { validator: validateEmail, trigger: "blur" },
+  ],
   password: [{ required: true, message: "请输入密码", trigger: "blur" }],
   code: [{ required: true, message: "请输入验证码", trigger: "blur" }],
 };
-const userStore = useUserStore();
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      getLogin(loginForm.value).then((res:number) => {
-        console.log(res)
+      getRegister(registerForm.value).then((res: number) => {
+        console.log(res);
         if (res > 0) {
           ElMessage({
-            message: '登录成功',
+            message: "注册成功",
             type: "success",
           });
-          userStore.setLoginState(true);
-          router.push("/home");
         } else {
           ElMessage({
-            message: res ? '验证码错误' : '用户名或密码错误',
+            message: res
+              ? res === -1
+                ? "验证码错误"
+                : "注册失败"
+              : "用户名已存在",
             type: "error",
           });
         }
@@ -99,8 +117,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 </script>
 
 <style scoped lang="scss">
-.login-form {
-  height: 285px;
+.register-form {
   ::v-deep(.el-icon) {
     color: #333;
   }

@@ -1,6 +1,7 @@
 import { App } from 'vue';
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { useUserStore } from '@/store';
+import { storeToRefs } from 'pinia';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -33,7 +34,7 @@ export const router = createRouter({
 
 export const setupRouter = (app: App) => {
 	const userStore = useUserStore();
-  const { loginState } = userStore;
+  const { loginState } = storeToRefs(userStore);
 	router.beforeEach((to, from, next) => {
     console.log(to)
     if (to.path !== "/login" && !loginState) {

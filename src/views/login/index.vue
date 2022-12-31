@@ -15,6 +15,7 @@
             </el-tabs>
           </div>
           <user-login v-if="activeName === 'user'"></user-login>
+          <user-register v-else></user-register>
         </div>
       </div>
     </div>
@@ -24,6 +25,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import userLogin from './userLogin.vue'
+import userRegister from './userRegister.vue';
 const activeName = ref<string>('user');
 </script>
 <style lang="scss">
@@ -71,6 +73,7 @@ const activeName = ref<string>('user');
 
   &__card {
     width: 406px;
+    height: 428px;
     margin: 0 auto;
 
     &-title {
