@@ -51,6 +51,7 @@ import { User, Lock, Pointer } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
 import { getLogin } from "@/apis/login";
+import { getUserInfo } from "@/apis/user";
 import { router } from "@/router";
 import { useUserStore } from '@/store';
 
@@ -71,19 +72,24 @@ const loginRules: FormRules = {
   code: [{ required: true, message: "请输入验证码", trigger: "blur" }],
 };
 const userStore = useUserStore();
+const getUser = () => {
+  getUserInfo().then((res) => {
+    userStore.setUserInfo(res);
+    userStore.setLoginState(true);
+    router.push("/home");
+  })
+}
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
       getLogin(loginForm.value).then((res:number) => {
-        console.log(res)
         if (res > 0) {
           ElMessage({
             message: '登录成功',
             type: "success",
           });
-          userStore.setLoginState(true);
-          router.push("/home");
+          getUser();
         } else {
           ElMessage({
             message: res ? '验证码错误' : '用户名或密码错误',

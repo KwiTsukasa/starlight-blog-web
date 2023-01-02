@@ -1,5 +1,7 @@
 import { App } from 'vue';
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 import { useUserStore } from '@/store';
 import { storeToRefs } from 'pinia';
 
@@ -36,10 +38,13 @@ export const setupRouter = (app: App) => {
 	const userStore = useUserStore();
   const { loginState } = storeToRefs(userStore);
 	router.beforeEach((to, from, next) => {
-    console.log(to)
+    NProgress.start()
     if (to.path !== "/login" && !loginState) {
       next({ path: "/login" });
     } else next();
   });
+  router.afterEach(to => {
+    NProgress.done()
+  })
 	app.use(router);
 };

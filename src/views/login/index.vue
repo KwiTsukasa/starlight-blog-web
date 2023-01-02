@@ -23,13 +23,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import userLogin from './userLogin.vue'
-import userRegister from './userRegister.vue';
-const activeName = ref<string>('user');
+import { ref } from "vue";
+import userLogin from "./userLogin.vue";
+import userRegister from "./userRegister.vue";
+const activeName = ref<string>("user");
 </script>
 <style lang="scss">
-@use '@/styles/login.scss';
+@use "@/styles/login.scss";
 </style>
 <style scoped lang="scss">
 .login {
@@ -41,8 +41,10 @@ const activeName = ref<string>('user');
     width: 100%;
     height: 100%;
     margin: 0 auto;
-    background-image: url(/login.png);
-    background-size: 100% 100%;
+    background-image: url("/login.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 
   &__box {
