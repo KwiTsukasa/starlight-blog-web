@@ -18,30 +18,115 @@
     transition: all ease 0.2s;
     z-index: 1000;
     &-container {
+      box-sizing: border-box;
       position: relative;
       left: 50%;
       transform: translateX(-50%);
       width: 1200px;
       height: 100%;
-      line-height: 54px;
       display: flex;
-      div {
+      transition: all ease 0.2s;
+      .el-button.is-link {
+        margin: 0;
+        padding: 0;
         width: fit-content;
         height: 100%;
+        line-height: 54px;
         margin-right: 40px;
         color: #fff;
         font-size: 0.875rem;
         font-weight: 600;
         letter-spacing: 0.05px;
         text-transform: none;
-        font-family: "Open Sans", -apple-system, system-ui, BlinkMacSystemFont,
-        "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
-        "Hiragino Sans GB", "Microsoft YaHei", SimSun, sans-serif;
+        font-family: "Helvetica Neue", Helvetica, "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+        transition: all ease 0.3s;
+        &:hover {
+          color: rgba(255, 255, 255, 0.65) !important;
+          transition: all ease 0.3s;
+        }
+        &:active {
+          color: rgba(255, 255, 255, 0.65) !important;
+          transition: all ease 0.3s;
+        }
+        &:focus {
+          color: #fff;
+          transition: all ease 0.3s;
+        }
       }
       img {
         width: 54px;
         height: 54px;
         object-fit: cover;
+      }
+      i {
+        height: 37px;
+        width: fit-content;
+        line-height: 37px;
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .header-search {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+        max-width: calc(220px - 170px);
+        transition: max-width 0.5s cubic-bezier(0.4, 0, 0, 1);
+        .el-input.el-input--prefix {
+          position: relative;
+        }
+        .el-input.el-input--prefix,
+        .el-input__wrapper {
+          height: 37px;
+          box-shadow: none;
+          background-color: transparent !important;
+          border-radius: var(
+            --el-input-border-radius,
+            var(--el-border-radius-base)
+          );
+          transition: all 0.5s cubic-bezier(0.4, 0, 0, 1);
+        }
+        i svg,
+        svg path {
+          cursor: pointer;
+          fill: #fff;
+          transition: fill 0.1s ease;
+        }
+      }
+      .top-search-is-active {
+        max-width: 220px;
+        transition: max-width 0.5s cubic-bezier(0.4, 0, 0, 1);
+        .el-input.el-input--prefix,
+        .el-input__wrapper {
+          box-shadow: 0 0 0 1px
+            var(--el-input-border-color, var(--el-border-color)) inset;
+          background-color: var(
+            --el-input-bg-color,
+            var(--el-fill-color-blank)
+          ) !important;
+          border-radius: var(
+            --el-input-border-radius,
+            var(--el-border-radius-base)
+          );
+          transition: all 0.5s cubic-bezier(0.4, 0, 0, 1);
+        }
+        .el-input__wrapper.is-focus {
+          box-shadow: 0 0 0 1px var(--el-input-focus-border-color) inset;
+        }
+        i svg,
+        svg path {
+          cursor: auto;
+          fill: #adb5bd;
+          transition: fill 0.1s ease;
+        }
+      }
+    }
+    @media screen and (max-width: 1200px) {
+      &-container {
+        width: 100%;
+        padding: 0 20px;
       }
     }
   }
@@ -53,6 +138,8 @@
     text-shadow: 0 5px 15px rgb(0 0 0 / 20%);
     font-size: 1.8em;
     color: #fff;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+      "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
     background: linear-gradient(
       180deg,
       rgba(0, 0, 0, 0.25) 0%,
@@ -80,6 +167,8 @@
         transition: all ease 0.1s;
         margin-top: -20px;
         margin-bottom: 15px;
+        font-family: "Helvetica Neue", Helvetica, "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
         .user-label {
           width: 100%;
           height: 60%;

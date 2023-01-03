@@ -15,17 +15,35 @@
       </el-backtop>
       <div class="blog-header" ref="headerBarRef">
         <div class="blog-header-container">
-          <div>
-            <img src="/title.ico" />
+          <div class="home-img">
+            <el-button link>
+              <img src="/title.ico" />
+            </el-button>
           </div>
-          <div>
-            {{ userInfo.user_name }}的博客
+          <div class="home-title">
+            <el-button link>{{ userInfo.user_name }}的博客</el-button>
           </div>
-          <div>
-            全部博客
+          <div class="all-blog">
+            <el-button link>全部博客</el-button>
           </div>
-          <div>
-            工作台
+          <div class="workspace">
+            <el-button link>工作台</el-button>
+          </div>
+          <div class="header-search" :class="topSearchActive ? 'top-search-is-active' : ''">
+            <el-input v-model="topSearch" placeholder="搜索什么..." @blur="topSearchActive = false">
+              <template #prefix>
+                <i class="el-icon">
+                  <svg viewBox="0 0 48 48" fill="#fff" @click="topSearchActive = true">
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M22 5c9.389 0 17 7.611 17 17 0 3.549-1.087 6.844-2.947 9.57l6.782 6.782a1 1 0 010 1.414l-1.697 1.698a1 1 0 01-1.414 0l-6.604-6.605A16.934 16.934 0 0122 39c-9.389 0-17-7.611-17-17S12.611 5 22 5zm0 4.2C14.93 9.2 9.2 14.93 9.2 22S14.93 34.8 22 34.8 34.8 29.07 34.8 22 29.07 9.2 22 9.2z"
+                      fill="#fff"
+                    />
+                  </svg>
+                </i>
+              </template>
+            </el-input>
           </div>
         </div>
       </div>
@@ -43,7 +61,9 @@
                 <span class="dic">{{ userInfo.user_name }}</span>
               </div>
             </div>
-            <div class="search-button"></div>
+            <div class="search-button">
+              
+            </div>
           </div>
           <div class="blog-container-aside-info" ref="asideInfoRef"></div>
         </div>
@@ -105,6 +125,9 @@ const scro1lChange = (e) => {
     headerStyle.top = scrollStyle.defaultTop;
   }
 };
+
+const topSearch = ref<string>("");
+const topSearchActive = ref<boolean>(false);
 </script>
 
 <style lang="scss">
