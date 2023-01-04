@@ -198,7 +198,7 @@
         height: 250px;
         border-radius: 4px;
         background-color: white;
-        transition: all ease 0.1s;
+        transition: all 0.1s cubic-bezier(0.4, 0, 0, 1);
         margin-top: -20px;
         margin-bottom: 15px;
         font-family: "Helvetica Neue", Helvetica, "PingFang SC",
