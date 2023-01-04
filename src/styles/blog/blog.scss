@@ -1,13 +1,13 @@
 .main-container {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background-image: url("/ykeU5.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
   .blog-header {
     position: fixed;
     width: 100%;
@@ -26,32 +26,59 @@
       height: 100%;
       display: flex;
       transition: all ease 0.2s;
-      .el-button.is-link {
-        margin: 0;
-        padding: 0;
-        width: fit-content;
-        height: 100%;
-        line-height: 54px;
-        margin-right: 40px;
-        color: #fff;
-        font-size: 0.875rem;
-        font-weight: 600;
-        letter-spacing: 0.05px;
-        text-transform: none;
-        font-family: "Helvetica Neue", Helvetica, "PingFang SC",
-          "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-        transition: all ease 0.3s;
-        &:hover {
-          color: rgba(255, 255, 255, 0.65) !important;
-          transition: all ease 0.3s;
+      .left-container {
+        display: none;
+        i {
+          margin: calc((54px - 20px) / 2 - 1px) 0;
+          svg {
+            cursor: pointer;
+          }
         }
-        &:active {
-          color: rgba(255, 255, 255, 0.65) !important;
-          transition: all ease 0.3s;
+        @media screen and (max-width: 900px) {
+          display: block;
         }
-        &:focus {
+      }
+      .center-container {
+        display: flex;
+        float: left;
+        width: 100%;
+        white-space: nowrap;
+        .el-button.is-link {
+          margin: 0;
+          padding: 0;
+          width: fit-content;
+          height: 100%;
+          line-height: 54px;
+          margin-right: 40px;
           color: #fff;
+          font-size: 0.875rem;
+          font-weight: 600;
+          letter-spacing: 0.05px;
+          text-transform: none;
+          font-family: "Helvetica Neue", Helvetica, "PingFang SC",
+            "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
           transition: all ease 0.3s;
+          &:hover {
+            color: rgba(255, 255, 255, 0.65) !important;
+            transition: all ease 0.3s;
+          }
+          &:active {
+            color: rgba(255, 255, 255, 0.65) !important;
+            transition: all ease 0.3s;
+          }
+          &:focus {
+            color: #fff;
+            transition: all ease 0.3s;
+          }
+        }
+        @media screen and (max-width: 900px) {
+          justify-content: center;
+          .all-blog {
+            display: none;
+          }
+          .workspace {
+            display: none;
+          }
         }
       }
       img {
@@ -59,27 +86,14 @@
         height: 54px;
         object-fit: cover;
       }
-      i {
-        height: 37px;
-        width: fit-content;
-        line-height: 37px;
-        svg {
-          width: 20px;
-          height: 20px;
-        }
-      }
       .header-search {
-        display: flex;
-        align-items: center;
         margin-left: auto;
         max-width: calc(220px - 170px);
+        margin: calc((54px - 35px) / 2 - 1px) 0;
         transition: max-width 0.5s cubic-bezier(0.4, 0, 0, 1);
-        .el-input.el-input--prefix {
-          position: relative;
-        }
         .el-input.el-input--prefix,
         .el-input__wrapper {
-          height: 37px;
+          height: 35px;
           box-shadow: none;
           background-color: transparent !important;
           border-radius: var(
@@ -88,11 +102,37 @@
           );
           transition: all 0.5s cubic-bezier(0.4, 0, 0, 1);
         }
+        i {
+          height: 35px;
+          width: 28px;
+          line-height: 35px;
+          margin: 0 !important;
+          svg {
+            width: 20px;
+            height: 20px;
+          }
+        }
         i svg,
         svg path {
           cursor: pointer;
           fill: #fff;
           transition: fill 0.1s ease;
+        }
+        .is-visible {
+          display: none;
+          width: 42px;
+          svg {
+            display: block;
+            margin: calc((37px - 20px) / 2) auto;
+          }
+        }
+        @media screen and (max-width: 900px) {
+          .search-input {
+            display: none;
+          }
+          .is-visible {
+            display: block;
+          }
         }
       }
       .top-search-is-active {
@@ -100,8 +140,6 @@
         transition: max-width 0.5s cubic-bezier(0.4, 0, 0, 1);
         .el-input.el-input--prefix,
         .el-input__wrapper {
-          box-shadow: 0 0 0 1px
-            var(--el-input-border-color, var(--el-border-color)) inset;
           background-color: var(
             --el-input-bg-color,
             var(--el-fill-color-blank)
@@ -112,9 +150,6 @@
           );
           transition: all 0.5s cubic-bezier(0.4, 0, 0, 1);
         }
-        .el-input__wrapper.is-focus {
-          box-shadow: 0 0 0 1px var(--el-input-focus-border-color) inset;
-        }
         i svg,
         svg path {
           cursor: auto;
@@ -122,9 +157,7 @@
           transition: fill 0.1s ease;
         }
       }
-    }
-    @media screen and (max-width: 1200px) {
-      &-container {
+      @media screen and (max-width: 1200px) {
         width: 100%;
         padding: 0 20px;
       }
@@ -159,6 +192,7 @@
       width: 280px;
       height: 100%;
       margin: 0 15px;
+      overflow: hidden;
       &-title {
         width: 100%;
         height: 250px;

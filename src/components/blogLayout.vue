@@ -15,25 +15,45 @@
       </el-backtop>
       <div class="blog-header" ref="headerBarRef">
         <div class="blog-header-container">
-          <div class="home-img">
-            <el-button link>
-              <img src="/title.ico" />
-            </el-button>
+          <div class="left-container">
+            <el-icon :size="21" color="#fff" @click="drawerVisible = true"
+              ><Expand
+            /></el-icon>
           </div>
-          <div class="home-title">
-            <el-button link>{{ userInfo.user_name }}的博客</el-button>
+          <div class="center-container">
+            <div class="home-img">
+              <el-button link>
+                <img src="/title.ico" />
+              </el-button>
+            </div>
+            <div class="home-title">
+              <el-button link>{{ userInfo.user_name }}的博客</el-button>
+            </div>
+            <div class="all-blog">
+              <el-button link>全部博客</el-button>
+            </div>
+            <div class="workspace">
+              <el-button link>工作台</el-button>
+            </div>
           </div>
-          <div class="all-blog">
-            <el-button link>全部博客</el-button>
-          </div>
-          <div class="workspace">
-            <el-button link>工作台</el-button>
-          </div>
-          <div class="header-search" :class="topSearchActive ? 'top-search-is-active' : ''">
-            <el-input v-model="topSearch" placeholder="搜索什么..." @blur="topSearchActive = false">
+          <div
+            class="header-search"
+            :class="topSearchActive ? 'top-search-is-active' : ''"
+          >
+            <el-input
+              class="search-input"
+              v-model="topSearch"
+              placeholder="搜索什么..."
+              size="large"
+              @blur="topSearchActive = false"
+            >
               <template #prefix>
                 <i class="el-icon">
-                  <svg viewBox="0 0 48 48" fill="#fff" @click="topSearchActive = true">
+                  <svg
+                    viewBox="0 0 48 48"
+                    fill="#fff"
+                    @click="topSearchActive = true"
+                  >
                     <path
                       fill-rule="evenodd"
                       clip-rule="evenodd"
@@ -44,7 +64,18 @@
                 </i>
               </template>
             </el-input>
+            <i class="el-icon is-visible">
+              <svg viewBox="0 0 48 48" fill="#fff">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M22 5c9.389 0 17 7.611 17 17 0 3.549-1.087 6.844-2.947 9.57l6.782 6.782a1 1 0 010 1.414l-1.697 1.698a1 1 0 01-1.414 0l-6.604-6.605A16.934 16.934 0 0122 39c-9.389 0-17-7.611-17-17S12.611 5 22 5zm0 4.2C14.93 9.2 9.2 14.93 9.2 22S14.93 34.8 22 34.8 34.8 29.07 34.8 22 29.07 9.2 22 9.2z"
+                  fill="#fff"
+                />
+              </svg>
+            </i>
           </div>
+          <div style="clear: both"></div>
         </div>
       </div>
       <div class="blog-title">{{ userInfo.user_name }}的博客</div>
@@ -61,15 +92,30 @@
                 <span class="dic">{{ userInfo.user_name }}</span>
               </div>
             </div>
-            <div class="search-button">
-              
-            </div>
+            <div class="search-button"></div>
           </div>
           <div class="blog-container-aside-info" ref="asideInfoRef"></div>
         </div>
       </div>
     </el-scrollbar>
   </div>
+  <el-drawer
+    v-model="drawerVisible"
+    :with-header="false"
+    direction="ltr"
+    class="aisde-drawer"
+    :size="280"
+  >
+    <div class="user-info">
+      <div class="user-label">
+        <div class="label-text">
+          <p class="title">{{ userInfo.user_name }}的博客</p>
+          <span class="dic">{{ userInfo.user_name }}</span>
+        </div>
+      </div>
+      <div class="search-button"></div>
+    </div>
+  </el-drawer>
 </template>
 
 <script setup lang="ts">
@@ -91,7 +137,8 @@ const scrollStyle = {
   top: "-54px",
   backdropFilter: "blur(16px)",
   backgroundColor: (scrollTop) => {
-    return "rgba(94,114,228," + scrollTop * 0.0013 + ")";
+    let opctiy = scrollTop * 0.0013;
+    return "rgba(94,114,228," + (opctiy > 0.58 ? 0.58 : opctiy) + ")";
   },
   infoMarginTop: (scrollTop) => {
     return scrollTop - 484 + "px";
@@ -99,6 +146,7 @@ const scrollStyle = {
   titleMarginTop: "-182px",
   marginBottom: "115px",
 };
+
 const scro1lChange = (e) => {
   let scrollTop = e.scrollTop;
   let headerStyle = headerBarRef.value.style;
@@ -106,28 +154,33 @@ const scro1lChange = (e) => {
   let asideInfoStyle = asideInfoRef.value.style;
   headerStyle.backdropFilter = scrollStyle.backdropFilter;
   headerStyle.backgroundColor = scrollStyle.backgroundColor(scrollTop);
-  asideTitleStyle.marginTop = scrollStyle.defaultMarginTop[0];
-  asideTitleStyle.marginBottom = scrollStyle.defaultMarginBottom;
-  if (scrollTop === 533 || scrollTop === 385) {
-    asideTitleStyle.marginTop = scrollStyle.titleMarginTop;
-    asideTitleStyle.marginBottom = scrollStyle.marginBottom;
-  } else if (scrollTop > 236 && scrollTop < 448) {
-    headerStyle.top = scrollStyle.defaultTop;
-  } else if (scrollTop > 447 && scrollTop < 499) {
+  if (window.innerWidth > 900) {
+    asideTitleStyle.marginTop = scrollStyle.defaultMarginTop[0];
     asideTitleStyle.marginBottom = scrollStyle.defaultMarginBottom;
-    asideInfoStyle.marginTop = scrollStyle.defaultMarginTop[1];
-  } else if (scrollTop > 498) {
-    headerStyle.top = scrollStyle.top;
-    asideInfoStyle.marginTop = scrollStyle.infoMarginTop(scrollTop);
-  } else if (scrollTop === 0) {
+    if (scrollTop === 533 || scrollTop === 385) {
+      asideTitleStyle.marginTop = scrollStyle.titleMarginTop;
+      asideTitleStyle.marginBottom = scrollStyle.marginBottom;
+    } else if (scrollTop > 236 && scrollTop < 448) {
+      headerStyle.top = scrollStyle.defaultTop;
+    } else if (scrollTop > 447 && scrollTop < 499) {
+      asideTitleStyle.marginBottom = scrollStyle.defaultMarginBottom;
+      asideInfoStyle.marginTop = scrollStyle.defaultMarginTop[1];
+    } else if (scrollTop > 498) {
+      headerStyle.top = scrollStyle.top;
+      asideInfoStyle.marginTop = scrollStyle.infoMarginTop(scrollTop);
+    } else {
+      headerStyle.top = scrollStyle.defaultTop;
+    }
+  }
+  if (scrollTop === 0) {
     headerStyle.backdropFilter = scrollStyle.defaultBackdropFilter;
-  } else {
-    headerStyle.top = scrollStyle.defaultTop;
   }
 };
 
 const topSearch = ref<string>("");
 const topSearchActive = ref<boolean>(false);
+
+const drawerVisible = ref<boolean>(false);
 </script>
 
 <style lang="scss">
@@ -156,5 +209,38 @@ const topSearchActive = ref<boolean>(false);
   text-align: center;
   line-height: 40px;
   color: #1989fa;
+}
+
+.aisde-drawer {
+  width: 280px !important;
+  .user-info {
+    width: 100%;
+    height: 250px;
+    background-color: white;
+    margin-top: -20px;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+      "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    .user-label {
+      width: 100%;
+      height: 60%;
+      padding: 0 20px;
+      text-align: left;
+      background: linear-gradient(
+        150deg,
+        #8998eb 15%,
+        #5e72e4 70%,
+        #5368e2 94%
+      );
+      .label-text {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #fff;
+        .title {
+          font-size: 20px;
+        }
+      }
+    }
+  }
 }
 </style>

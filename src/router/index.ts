@@ -38,8 +38,8 @@ export const setupRouter = (app: App) => {
 	const userStore = useUserStore();
   const { loginState } = storeToRefs(userStore);
 	router.beforeEach((to, from, next) => {
-    NProgress.start()
-    if (to.path !== "/login" && !loginState) {
+    NProgress.start();
+    if (to.path !== "/login" && !loginState.value) {
       next({ path: "/login" });
     } else next();
   });
