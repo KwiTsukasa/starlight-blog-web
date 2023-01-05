@@ -51,13 +51,13 @@
           line-height: 54px;
           margin-right: 40px;
           color: #fff;
-          font-size: 0.875rem;
-          font-weight: 600;
-          letter-spacing: 0.05px;
+          font-size: 1rem;
+          font-weight: bold;
+          letter-spacing: 1px;
           text-transform: none;
+          transition: all ease 0.3s;
           font-family: "Helvetica Neue", Helvetica, "PingFang SC",
             "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-          transition: all ease 0.3s;
           &:hover {
             color: rgba(255, 255, 255, 0.65) !important;
             transition: all ease 0.3s;
@@ -240,12 +240,10 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      transition: all ease 0.3s;
       &-list {
         width: 100%;
         height: 300px;
         margin-bottom: 15px;
-        border-radius: 4px;
         background-color: white;
       }
       &-footer {
@@ -260,5 +258,24 @@
         width: 100%;
       }
     }
+  }
+}
+
+.card {
+  border-radius: 6px;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  animation: card-show 0.25s ease-out;
+  transform-origin: center top;
+}
+
+@keyframes card-show {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
   }
 }

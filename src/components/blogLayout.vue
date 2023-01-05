@@ -2,7 +2,6 @@
   <div class="main-container">
     <el-scrollbar
       @scroll="scro1lChange"
-      view-style="transition: all ease 0.3s;"
     >
       <el-backtop
         :right="100"
@@ -13,6 +12,22 @@
           <el-icon><ArrowUpBold /></el-icon>
         </div>
       </el-backtop>
+      <el-popover placement="left" trigger="click">
+        <template #reference>
+          <el-button class="theme-change">
+            <el-icon color="#5e72e4">
+              <svg width="20" height="20" viewBox="0 0 48 48">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M24 2c1.659 0 3.274.184 4.828.532l2.388 5.42a3 3 0 003.07 1.772l5.88-.64A21.98 21.98 0 0145 17.447l-3.499 4.781a3 3 0 000 3.544L45 30.552a21.98 21.98 0 01-4.834 8.364l-5.88-.64a3 3 0 00-3.07 1.773l-2.388 5.42c-1.554.347-3.17.531-4.828.531-1.659 0-3.275-.184-4.829-.532l-2.387-5.42a3 3 0 00-3.07-1.772l-5.88.64A21.98 21.98 0 013 30.553l3.499-4.781a3 3 0 000-3.544L3 17.448a21.98 21.98 0 014.834-8.364l5.88.64a3 3 0 003.07-1.773l2.387-5.419A22.06 22.06 0 0124 2zm0 14a8 8 0 100 16 8 8 0 000-16z"
+                />
+              </svg>
+            </el-icon>
+          </el-button>
+        </template>
+        <span>1</span>
+      </el-popover>
       <div class="blog-header" ref="headerBarRef">
         <div class="blog-header-container">
           <div class="left-container">
@@ -81,11 +96,11 @@
       <div class="blog-title">{{ userInfo.user_name }}的博客</div>
       <div class="blog-container">
         <div class="blog-container-main">
-          <div class="blog-container-main-list" v-for="i in 5"></div>
-          <div class="blog=container-main-footer"></div>
+          <div class="blog-container-main-list card" v-for="i in 5"></div>
+          <div class="blog=container-main-footer card"></div>
         </div>
         <div class="blog-container-aside">
-          <div class="blog-container-aside-title" ref="asideTitleRef">
+          <div class="blog-container-aside-title card" ref="asideTitleRef">
             <div class="user-label">
               <div class="label-text">
                 <p class="title">{{ userInfo.user_name }}的博客</p>
@@ -94,7 +109,7 @@
             </div>
             <div class="search-button"></div>
           </div>
-          <div class="blog-container-aside-info" ref="asideInfoRef"></div>
+          <div class="blog-container-aside-info card" ref="asideInfoRef"></div>
         </div>
       </div>
     </el-scrollbar>
@@ -188,8 +203,13 @@ const drawerVisible = ref<boolean>(false);
 </style>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1450px) {
   ::v-deep(.el-backtop) {
+    left: 100px;
+    right: 0;
+    transition: all ease 0.3s;
+  }
+  .theme-change {
     left: 100px;
     right: 0;
     transition: all ease 0.3s;
@@ -200,6 +220,10 @@ const drawerVisible = ref<boolean>(false);
     display: none;
     transition: all ease 0.3s;
   }
+  .theme-change {
+    display: none;
+    transition: all ease 0.3s;
+  }
 }
 .backtop {
   height: 40px;
@@ -207,8 +231,33 @@ const drawerVisible = ref<boolean>(false);
   background-color: var(--el-bg-color-overlay);
   box-shadow: var(--el-box-shadow-lighter);
   text-align: center;
-  line-height: 40px;
-  color: #1989fa;
+  color: #5e72e4;
+  border-radius: 4px;
+  i {
+    position: relative;
+    top: calc((40px - 20px) / 2);
+  }
+}
+
+.theme-change {
+  position: fixed;
+  bottom: 50px;
+  right: 100px;
+  height: 40px;
+  width: 40px;
+  border: 0px;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: #5e72e4;
+    i svg {
+      fill: #fff;
+      transition: all 0.15s ease;
+      path {
+        fill: #fff;
+        transition: all 0.15s ease;
+      }
+    }
+  }
 }
 
 .aisde-drawer {
