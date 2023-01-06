@@ -1,14 +1,23 @@
 <template>
-  <div class="main-container" @scroll="scro1lChange" ref="mainScroll">
-    <el-backtop :right="100" :bottom="100" target=".main-container">
+  <div
+    :class="classSetting.themeModel + ' ' + classSetting.font"
+    @scroll="scro1lChange"
+    ref="mainScroll"
+  >
+    <el-backtop :right="100" :bottom="100" target=".light-container">
       <div class="backtop">
         <el-icon><ArrowUpBold /></el-icon>
       </div>
     </el-backtop>
-    <el-popover placement="left" trigger="click">
+    <el-popover
+      placement="left"
+      trigger="click"
+      width="fit-content"
+      :effect="classSetting.themeModel === 'light-container' ? 'light' : 'dark'"
+    >
       <template #reference>
         <el-button class="theme-change">
-          <el-icon color="#5e72e4">
+          <el-icon color="$primary">
             <svg width="20" height="20" viewBox="0 0 48 48">
               <path
                 fill-rule="evenodd"
@@ -19,7 +28,46 @@
           </el-icon>
         </el-button>
       </template>
-      <span>1</span>
+      <div class="pop-content">
+        <div class="pop-row">
+          <div class="pop-label">夜间模式：</div>
+          <el-switch
+            v-model="classSetting.themeModel"
+            active-value="dark-container"
+            inactive-value="light-container"
+            size="large"
+            inline-prompt
+            :active-icon="Moon"
+            :inactive-icon="Sunny"
+            style="
+              --el-switch-on-color: #000;
+              --el-switch-off-color: var(--el-color-primary);
+            "
+            @change="changeTheme"
+          />
+        </div>
+        <div class="pop-row">
+          <div class="pop-label">字体：</div>
+          <el-radio-group
+            v-model="classSetting.font"
+            :class="
+              classSetting.themeModel === 'light-container' ? 'light' : 'dark'
+            "
+          >
+            <el-radio-button label="Comfortaa" />
+            <el-radio-button label="Helvetica" />
+          </el-radio-group>
+        </div>
+        <div class="pop-row">
+          <div class="pop-label">主题色：</div>
+          <el-color-picker
+            ref="colorPicker"
+            v-model="classSetting.themeColor"
+            color-format="rgb"
+            @active-change="changeThemeColor"
+          />
+        </div>
+      </div>
     </el-popover>
     <div class="blog-header" ref="headerBarRef">
       <div class="blog-header-container">
@@ -129,8 +177,10 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { Sunny, Moon } from "@element-plus/icons-vue";
 import { useUserStore } from "@/store";
 import { storeToRefs } from "pinia";
+import { ColorPickerInstance } from "element-plus";
 
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
@@ -142,7 +192,11 @@ const oldScrollTop = ref<number>(0);
 
 const backgroundColor = (scrollTop: number) => {
   let opctiy = scrollTop * 0.0013;
-  return "rgba(94,114,228," + (opctiy > 0.58 ? 0.58 : opctiy) + ")";
+  if (classSetting.value.themeModel === "light-container") {
+    return "rgba(94,114,228," + (opctiy > 0.58 ? 0.58 : opctiy) + ")";
+  } else {
+    return "rgba(29,30,40," + (opctiy > 0.58 ? 0.58 : opctiy) + ")";
+  }
 };
 
 const scro1lChange = (e) => {
@@ -168,10 +222,81 @@ const topSearch = ref<string>("");
 const topSearchActive = ref<boolean>(false);
 
 const drawerVisible = ref<boolean>(false);
+
+const classSetting = ref({
+  font: "Comfortaa",
+  themeModel: "light-container",
+  themeColor: "rgb(94,114,228)",
+});
+
+const colorPicker = ref<ColorPickerInstance>();
+
+const changeTheme = () => {
+  let headerStyle = headerBarRef.value.style;
+  headerStyle.backgroundColor = backgroundColor(oldScrollTop.value);
+};
+
+const changeThemeColor = (color) => {
+  // let mixColor = mix()
+  //useElementPlusTheme(color);
+};
+
+const mix = (color1: string, color2: string, weight: number) => {
+  weight = Math.max(Math.min(Number(weight), 1), 0);
+  const r1 = parseInt(color1.substring(1, 3), 16);
+  const g1 = parseInt(color1.substring(3, 5), 16);
+  const b1 = parseInt(color1.substring(5, 7), 16);
+  const r2 = parseInt(color2.substring(1, 3), 16);
+  const g2 = parseInt(color2.substring(3, 5), 16);
+  const b2 = parseInt(color2.substring(5, 7), 16);
+  const r = Math.round(r1 * (1 - weight) + r2 * weight);
+  const g = Math.round(g1 * (1 - weight) + g2 * weight);
+  const b = Math.round(b1 * (1 - weight) + b2 * weight);
+  const _r = ("0" + (r || 0).toString(16)).slice(-2);
+  const _g = ("0" + (g || 0).toString(16)).slice(-2);
+  const _b = ("0" + (b || 0).toString(16)).slice(-2);
+  return "#" + _r + _g + _b;
+};
 </script>
 
 <style lang="scss">
-@use "@/styles/blog/blog.scss";
+@import "@/styles/blog/blog.scss";
+
+.light {
+  * {
+    color: $dark;
+  }
+  border-radius: $theme-border-radius;
+  overflow: hidden;
+  border: $primary-border;
+  background-color: transparent !important;
+  .el-radio-button,
+  .el-radio-button__inner {
+    border: none !important;
+    background-color: transparent !important;
+  }
+  .is-active {
+    background-color: $primary !important;
+  }
+}
+
+.dark {
+  * {
+    color: $light;
+  }
+  border-radius: $theme-border-radius;
+  overflow: hidden;
+  border: $primary-border;
+  background-color: transparent !important;
+  .el-radio-button,
+  .el-radio-button__inner {
+    border: none !important;
+    background-color: transparent !important;
+  }
+  .is-active {
+    background-color: $primary !important;
+  }
+}
 </style>
 
 <style lang="scss" scoped>
@@ -197,57 +322,22 @@ const drawerVisible = ref<boolean>(false);
     transition: all ease 0.3s;
   }
 }
-.backtop {
-  height: 40px;
-  width: 100%;
-  background-color: var(--el-bg-color-overlay);
-  box-shadow: var(--el-box-shadow-lighter);
-  text-align: center;
-  color: #5e72e4;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  i {
-    position: relative;
-    top: calc((40px - 20px) / 2);
-  }
-  &:hover {
-    background-color: #5e72e4;
-    i {
-      --color: #fff;
-      transition: all 0.15s ease;
-    }
+.pop-content {
+  width: fit-content;
+  height: fit-content;
+  .pop-row {
+    width: fit-content;
+    height: 40px;
+    display: flex;
+    align-items: center;
   }
 }
-
-.theme-change {
-  position: fixed;
-  bottom: 50px;
-  right: 100px;
-  height: 40px;
-  width: 40px;
-  border: 0px;
-  z-index: 1000;
-  box-shadow: var(--el-box-shadow-lighter);
-  transition: all 0.3s ease;
-  &:hover {
-    background-color: #5e72e4;
-    i svg {
-      fill: #fff;
-      transition: all 0.15s ease;
-      path {
-        fill: #fff;
-        transition: all 0.15s ease;
-      }
-    }
-  }
-}
-
 .aisde-drawer {
   width: 280px !important;
   .user-info {
     width: 100%;
     height: 250px;
-    background-color: white;
+    background-color: $light;
     margin-top: -20px;
     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
       "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
@@ -259,17 +349,11 @@ const drawerVisible = ref<boolean>(false);
       background: linear-gradient(
         150deg,
         #8998eb 15%,
-        #5e72e4 70%,
+        $primary 70%,
         #5368e2 94%
       );
       .label-text {
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #fff;
-        .title {
-          font-size: 20px;
-        }
+        @include label-text;
       }
     }
   }
