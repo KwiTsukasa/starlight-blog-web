@@ -63,9 +63,6 @@ $dark-linear: rgb(
 );
 $dark-float: hsl($H, calc($S * 1%), max(calc($L * 1% - 10%), 0%));
 
-@at-root (with: all) {
-}
-
 @mixin label-text {
   position: relative;
   top: 50%;
