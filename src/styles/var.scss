@@ -1,3 +1,24 @@
+:root {
+  --R: 94;
+  --G: 114;
+  --B: 228;
+  --H: 231;
+  --S: 71;
+  --L: 63;
+  --el-bg-color-overlay: rgb(
+    calc(var(--R) + (255 - var(--R)) * 0.92),
+    calc(var(--G) + (255 - var(--G)) * 0.92),
+    calc(var(--B) + (255 - var(--B)) * 0.92)
+  );
+  --el-popover-bg-color: var(--el-bg-color-overlay);
+  --el-color-black: rgb(
+    calc(25.8 + var(--R) * 0.14),
+    calc(25.8 + var(--G) * 0.14),
+    calc(25.8 + var(--B) * 0.14)
+  );
+  --el-text-color-primary: var(--el-color-black);
+}
+
 $R: var(--R);
 $G: var(--G);
 $B: var(--B);
@@ -12,12 +33,21 @@ $input-color: var(--el-input-bg-color, var(--el-fill-color-blank));
 $input-icon-color: #adb5bd;
 $card-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 
-$light: #fff;
+$light: rgb(
+  calc($R + (255 - $R) * 0.92),
+  calc($G + (255 - $G) * 0.92),
+  calc($B + (255 - $B) * 0.92)
+);
 $light-linear: linear-gradient(
   150deg,
   hsl($H, calc($S * 1%), min(calc($L * 1% + 10%), 100%)) 15%,
   rgb($R, $G, $B) 70%,
   hsl($H, calc($S * 1%), max(calc($L * 1% - 2.5%), 0%)) 94%
+);
+$light-float: rgb(
+  calc($R + (255 - $R) * 0.95),
+  calc($G + (255 - $G) * 0.95),
+  calc($B + (255 - $B) * 0.95)
 );
 
 $dark: rgb(
@@ -31,25 +61,9 @@ $dark-linear: rgb(
   calc(30 * 0.86 + $G * (1 - 0.86)),
   calc(30 * 0.86 + $B * (1 - 0.86))
 );
-$dark-float: #324cdc;
-
-@forward "element-plus/theme-chalk/src/common/var.scss" with (
-  $colors: (
-    "primary": (
-      "base": rgb(94, 114, 228),
-    ),
-  )
-);
+$dark-float: hsl($H, calc($S * 1%), max(calc($L * 1% - 10%), 0%));
 
 @at-root (with: all) {
-  :root {
-    --R: 94;
-    --G: 114;
-    --B: 228;
-    --H: 231;
-    --S: 71;
-    --L: 63;
-  }
 }
 
 @mixin label-text {
@@ -58,7 +72,7 @@ $dark-float: #324cdc;
   transform: translateY(-50%);
   color: $light;
   .title {
-    font-size: 20px;
+    font-size: 1.6em;
   }
   .dic {
     opacity: 0.8;
@@ -240,7 +254,7 @@ $dark-float: #324cdc;
     height: 250px;
     line-height: 250px;
     text-align: center;
-    text-shadow: 0 5px 15px rgb(0 0 0 / 20%);
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
     &::after {
       content: "";
       position: absolute;
@@ -257,10 +271,22 @@ $dark-float: #324cdc;
       );
     }
     span {
-      font-size: 3em;
-      letter-spacing: 0.5rem;
-      color: #fff;
-      filter: drop-shadow(0px 0px 5px rgba(236, 120, 139, 0.8));
+      display: inline-block;
+      height: 100%;
+      animation: text-box var(--box) ease;
+      animation-fill-mode: forwards;
+      overflow: hidden;
+      white-space: nowrap;
+      span {
+        height: fit-content;
+        font-size: 3em;
+        font-weight: bold;
+        color: transparent;
+        overflow: hidden;
+        animation: text var(--timer) ease;
+        animation-delay: var(--deylay);
+        animation-fill-mode: forwards;
+      }
     }
   }
   .blog-container {
@@ -272,28 +298,31 @@ $dark-float: #324cdc;
     display: flex;
     flex-direction: row-reverse;
     &-aside {
-      width: 280px;
+      position: relative;
       height: 100%;
-      margin: 0 15px;
+      animation: aside-visible 0.3s forwards;
       &-title {
         width: 100%;
         height: 250px;
         border-radius: 4px;
         background-color: $theme-color;
-        transition: all 0.1s cubic-bezier(0.4, 0, 0, 1);
-        margin-top: -20px;
         margin-bottom: 15px;
-        font-family: "Helvetica Neue", Helvetica, "PingFang SC",
-          "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+        overflow: hidden;
+        transition: all ease 0.2s;
         .user-label {
+          position: relative;
+          top: 0;
+          left: 0;
           width: 100%;
           height: 60%;
           text-align: center;
           border-top-left-radius: 4px;
           border-top-right-radius: 4px;
           background: $theme-label-bg;
+          overflow: hidden;
           .label-text {
             @include label-text;
+            overflow: hidden;
           }
         }
       }
@@ -304,6 +333,7 @@ $dark-float: #324cdc;
         height: 350px;
         border-radius: 4px;
         background-color: $theme-color;
+        overflow: hidden;
         transition: all ease 0.2s;
       }
     }
@@ -322,12 +352,21 @@ $dark-float: #324cdc;
         transition: all ease 0.2s;
       }
       &-footer {
+        width: 100%;
+        height: 100px;
+        margin-bottom: 20px;
+        text-align: center;
+        line-height: 100px;
+        color: $light;
+        font-size: 1.2em;
+        font-weight: bold;
+        letter-spacing: 0.1em;
+        background: $theme-label-bg;
       }
     }
     @media screen and (max-width: 900px) {
       &-aside {
-        width: 0;
-        margin: 0;
+        animation: aside-hidden 0.3s forwards;
       }
       &-main {
         width: 100%;
@@ -337,8 +376,8 @@ $dark-float: #324cdc;
   .backtop {
     height: 40px;
     width: 100%;
-    background-color: $light !important;
-    box-shadow: $card-shadow;
+    border: 0.0625rem solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     text-align: center;
     color: $light;
     border-radius: 4px;
@@ -346,7 +385,7 @@ $dark-float: #324cdc;
     transition: all 0.3s ease;
     @if ($theme-type == "light") {
       color: $theme-float;
-      background-color: $light !important;
+      background-color: $light-float !important;
     }
     i {
       position: relative;
@@ -357,16 +396,14 @@ $dark-float: #324cdc;
       background-color: $theme-float !important;
     }
   }
-
-  .theme-change {
-    position: fixed;
-    bottom: 50px;
-    right: 100px;
+  .float-box {
+    margin: 0 !important;
     height: 40px !important;
     width: 40px;
-    border: 0px !important;
+    border-radius: 4px;
     z-index: 1000;
-    box-shadow: $card-shadow;
+    border: 0.0625rem solid rgba(0, 0, 0, 0.05) !important;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     background-color: $theme-label-bg !important;
     transition: all 0.3s ease;
     i svg {
@@ -378,7 +415,7 @@ $dark-float: #324cdc;
       }
     }
     @if ($theme-type == "light") {
-      background-color: $light !important;
+      background-color: $light-float !important;
       i svg {
         fill: $theme-float;
         transition: all 0.15s ease;
@@ -399,5 +436,55 @@ $dark-float: #324cdc;
       }
       background-color: $theme-float !important;
     }
+  }
+  .aisde-drawer {
+    width: 280px !important;
+    background-color: $theme-color;
+    .user-info {
+      width: 100%;
+      height: 250px;
+      background-color: $theme-color;
+      margin-top: -20px;
+      .user-label {
+        width: 100%;
+        height: 60%;
+        padding: 0 20px;
+        text-align: left;
+        background: $theme-label-bg;
+        .label-text {
+          @include label-text;
+        }
+      }
+    }
+  }
+}
+
+@keyframes aside-hidden {
+  0% {
+    width: 280px;
+    margin: 0 15px;
+    opacity: 1;
+    top: 0;
+  }
+  100% {
+    width: 0;
+    margin: 0;
+    opacity: 0;
+    top: 100%;
+  }
+}
+
+@keyframes aside-visible {
+  0% {
+    width: 0;
+    margin: 0;
+    opacity: 0;
+    top: 100%;
+  }
+  100% {
+    width: 280px;
+    margin: 0 15px;
+    opacity: 1;
+    top: 0;
   }
 }

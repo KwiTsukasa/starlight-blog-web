@@ -7,3 +7,4 @@ export const setupStore = (app: App) => {
 	app.use(store);
 };
 export * from './modules/user';
+export * from './modules/theme';
