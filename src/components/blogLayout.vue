@@ -61,7 +61,7 @@
               '--el-switch-on-color': '#000',
               '--el-switch-off-color': 'var(--el-color-primary)',
             }"
-            @change="changeTheme"
+            @change="changeHeaderTheme"
           />
         </div>
         <div class="pop-row">
@@ -88,66 +88,36 @@
     </el-popover>
     <div class="blog-header" ref="headerBarRef">
       <div class="blog-header-container">
-        <div class="left-container">
-          <el-icon :size="21" color="#fff" @click="drawerVisible = true"
-            ><Expand
-          /></el-icon>
-        </div>
-        <div class="center-container">
-          <div class="home-img">
-            <el-button link>
-              <img src="/title.ico" />
-            </el-button>
-          </div>
-          <div class="home-title">
-            <el-button link>{{ userInfo.user_name }}的博客</el-button>
-          </div>
-          <div class="all-blog">
-            <el-button link>全部博客</el-button>
-          </div>
-          <div class="workspace">
-            <el-button link>工作台</el-button>
-          </div>
-        </div>
+        <top-box
+          v-model:drawer-visible="drawerVisible"
+          v-model:name="userInfo.user_name"
+        />
         <top-seacrch-input
-          v-model:top-search="topSearch"
-          v-model:top-search-active="topSearchActive"
-        ></top-seacrch-input>
+          v-model:value="topSearch"
+          v-model:visible="topSearchActive"
+        />
         <div style="clear: both"></div>
       </div>
     </div>
     <div class="blog-title">
-      <span :style="{ '--box': oneToNTimer(userInfo.user_name.length) }">
-        <span
-          v-for="(item, key) in userInfo.user_name"
-          :key="key"
-          :style="{
-            '--deylay': (10 / userInfo.user_name.length) * key * 0.5 + 's',
-            '--timer': 10 / userInfo.user_name.length + 's',
-          }"
-        >
-          {{ item }}
-        </span>
-      </span>
+      <blog-title v-model:name="userInfo.user_name" />
     </div>
     <div class="blog-container">
       <div class="blog-container-main">
-        <div class="blog-container-main-list card" v-for="i in 5"></div>
-        <div class="blog-container-main-footer card">
-          Theme&nbsp;StarLight&nbsp;By&nbsp;TsukasaKawaii
-        </div>
+        <router-view v-slot="{ Component }">
+          <component :is="Component" />
+        </router-view>
+        <blog-footer />
       </div>
       <div class="blog-container-aside">
-        <div class="blog-container-aside-title card">
-          <div class="user-label">
-            <div class="label-text">
-              <p class="title">{{ userInfo.user_name }}的博客</p>
-              <span class="dic">{{ userInfo.user_name }}</span>
-            </div>
-          </div>
-          <div class="search-button"></div>
+        <aside-title
+          v-model:name="userInfo.user_name"
+          v-model:value="leftSearch"
+          v-model:visible="leftSearchActive"
+        />
+        <div class="blog-container-aside-info card" ref="asideInfoRef">
+          <aside-info />
         </div>
-        <div class="blog-container-aside-info card" ref="asideInfoRef"></div>
       </div>
     </div>
     <el-drawer
@@ -171,12 +141,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
 import { Sunny, Moon } from "@element-plus/icons-vue";
 import { useUserStore, useThemeStore } from "@/store";
-import { storeToRefs } from "pinia";
 import { ColorPickerInstance } from "element-plus";
-import topSeacrchInput from "./layout-top/topSeacrchInput.vue";
+import Color from "@/util/color";
+import { debounce } from "lodash";
 
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
@@ -222,115 +191,31 @@ const scro1lChange = (e) => {
   oldScrollTop.value = scrollTop;
 };
 
-const oneToNTimer = (n: number) => {
-  let sum = 0;
-  let timer = 10 / n;
-  for (let i = 0; i < n; i++) {
-    let delay = (10 / n) * i * 0.5;
-    sum = delay + timer;
-  }
-  return sum + "s";
-};
-
 const topSearch = ref<string>("");
 const topSearchActive = ref<boolean>(false);
 const drawerVisible = ref<boolean>(false);
+const leftSearch = ref<string>("");
+const leftSearchActive = ref<boolean>(false);
 
 const settingVisible = ref<boolean>(false);
 const colorPicker = ref<ColorPickerInstance>();
-const node = document.documentElement;
-const pre = "--el-color-primary";
 const themeStore = useThemeStore();
 const { classSetting } = storeToRefs(themeStore);
-const mixWhite = "#ffffff";
-const changeTheme = () => {
+const changeHeaderTheme = () => {
   if (headerBarRef.value) {
     let headerStyle = headerBarRef.value.style;
     headerStyle.backgroundColor = backgroundColor(oldScrollTop.value);
   }
 };
 
-const changeThemeColor = (color) => {
+const changeThemeColor = debounce((color: string) => {
   classSetting.value.themeColor = color;
-  const [r, g, b] = hexTorgb(color);
-  const [h, s, l] = rgbToHsl(r, g, b);
-  node.style.setProperty("--R", r + "");
-  node.style.setProperty("--G", g + "");
-  node.style.setProperty("--B", b + "");
-  node.style.setProperty("--H", h + "");
-  node.style.setProperty("--S", s * 100 + "");
-  node.style.setProperty("--L", l * 100 + "");
-  node.style.setProperty(pre, color);
-  for (let i = 1; i < 10; i += 1) {
-    node.style.setProperty(`${pre}-light-${i}`, mix(color, mixWhite, i * 0.1));
-  }
-  changeTheme();
-};
-
-const hexTorgb = (color) => {
-  const r = parseInt(color.substring(1, 3), 16);
-  const g = parseInt(color.substring(3, 5), 16);
-  const b = parseInt(color.substring(5, 7), 16);
-  return [r, g, b];
-};
-
-const rgbToHsl = (R: number, G: number, B: number) => {
-  const r = R / 255;
-  const g = G / 255;
-  const b = B / 255;
-  const min = Math.min(r, g, b);
-  const max = Math.max(r, g, b);
-  const delta = max - min;
-  let h: number;
-  let s: number;
-  if (max === min) {
-    h = 0;
-  } else if (r === max) {
-    h = (g - b) / delta;
-  } else if (g === max) {
-    h = 2 + (b - r) / delta;
-  } else if (b === max) {
-    h = 4 + (r - g) / delta;
-  }
-  h = Math.min(h * 60, 360);
-  if (h < 0) {
-    h += 360;
-  }
-  const l = (min + max) / 2;
-  if (max === min) {
-    s = 0;
-  } else if (l <= 0.5) {
-    s = delta / (max + min);
-  } else {
-    s = delta / (2 - max - min);
-  }
-  return [h, s, l];
-};
-
-const rgbToHex = (R: number, G: number, B: number) => {
-  const r = ("0" + (R || 0).toString(16)).slice(-2);
-  const g = ("0" + (G || 0).toString(16)).slice(-2);
-  const b = ("0" + (B || 0).toString(16)).slice(-2);
-  return [r, g, b];
-};
-
-const minColorScale = (
-  [R1, G1, B1]: number[],
-  [R2, B2, G2]: number[],
-  minWeight: number
-) => {
-  const r = Math.round(R1 * (1 - minWeight) + R2 * minWeight);
-  const g = Math.round(G1 * (1 - minWeight) + B2 * minWeight);
-  const b = Math.round(B1 * (1 - minWeight) + G2 * minWeight);
-  return [r, g, b];
-};
-
-const mix = (color1: string, color2: string, weight: number) => {
-  weight = Math.max(Math.min(Number(weight), 1), 0);
-  const [r, g, b] = minColorScale(hexTorgb(color1), hexTorgb(color2), weight);
-  const [_r, _g, _b] = rgbToHex(r, g, b);
-  return "#" + _r + _g + _b;
-};
+  Color.changeTheme(color);
+  changeHeaderTheme();
+},1,{
+  'leading': true,
+  'trailing': false
+});
 
 changeThemeColor(classSetting.value.themeColor);
 
@@ -391,21 +276,10 @@ watch(
     right: 50px;
   }
   .theme-change {
-    animation: float-right-visible 1s forwards;
+    animation: float-right-visible 0.5s forwards;
   }
   .plus-blog {
-    animation: float-right-visible 1s forwards;
-  }
-  @keyframes float-right-visible {
-    0% {
-      left: 50px;
-      right: 0;
-      opacity: 0;
-    }
-    100% {
-      right: 50px;
-      opacity: 1;
-    }
+    animation: float-right-visible 0.5s forwards;
   }
 }
 @media screen and (max-width: 1450px) {
@@ -414,44 +288,21 @@ watch(
     right: 0;
   }
   .theme-change {
-    animation: float-left-visible 1s forwards;
+    animation: float-left-visible 0.5s forwards;
   }
   .plus-blog {
-    animation: float-left-visible 1s forwards;
-  }
-  @keyframes float-left-visible {
-    0% {
-      right: 50px;
-      left: 0;
-      opacity: 0;
-    }
-    100% {
-      left: 50px;
-      right: 0;
-      opacity: 1;
-    }
+    animation: float-left-visible 0.5s forwards;
   }
 }
 @media screen and (max-width: 900px) {
   ::v-deep(.el-backtop) {
-    animation: float-hidden 1s forwards;
-    animation-iteration-count: 1;
+    animation: float-hidden 0.5s forwards;
   }
   .theme-change {
-    animation: float-hidden 1s forwards;
+    animation: float-hidden 0.5s forwards;
   }
   .plus-blog {
-    animation: float-hidden 1s forwards;
-  }
-  @keyframes float-hidden {
-    0% {
-      opacity: 1;
-      left: 50px;
-    }
-    100% {
-      opacity: 0;
-      left: -50px;
-    }
+    animation: float-hidden 0.5s forwards;
   }
 }
 .pop-content {

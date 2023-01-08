@@ -1,18 +1,18 @@
 <template>
   <div
     class="header-search"
-    :class="topSearchActive ? 'top-search-is-active' : ''"
+    :class="visible ? 'top-search-is-active' : ''"
   >
     <el-input
       class="search-input"
-      v-model="topSearch"
+      v-model="value"
       placeholder="搜索什么..."
       size="large"
-      @blur="emits('update:topSearchActive', false)"
-      @input="emits('update:topSearch')"
+      @blur="emits('update:visible', false)"
+      @input="emits('update:value')"
     >
       <template #prefix>
-        <i class="el-icon" @click="emits('update:topSearchActive', true);">
+        <i class="el-icon" @click="emits('update:visible', true);">
           <svg
             viewBox="0 0 48 48"
             fill="#fff"
@@ -41,14 +41,12 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs } from "vue";
-
 type Props = {
-  topSearchActive: boolean;
-  topSearch: string;
+  visible: boolean;
+  value: string;
 };
 const props = defineProps<Props>();
-const { topSearch, topSearchActive } = toRefs(props);
+const { value, visible } = toRefs(props);
 
-const emits = defineEmits(["update:topSearchActive", "update:topSearch"]);
+const emits = defineEmits(["update:visible", "update:value"]);
 </script>

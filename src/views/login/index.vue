@@ -23,7 +23,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import userLogin from "./userLogin.vue";
 import userRegister from "./userRegister.vue";
 const activeName = ref<string>("user");
