@@ -1,0 +1,110 @@
+@media screen and (min-width: 1451px) {
+  @keyframes float-right-visible {
+    0% {
+      right: 50px;
+      opacity: 0;
+    }
+    100% {
+      right: 50px;
+      opacity: 1;
+    }
+  }
+}
+
+@media screen and (max-width: 1450px) {
+  @keyframes float-left-visible {
+    0% {
+      left: 50px;
+      opacity: 0;
+    }
+    100% {
+      left: 50px;
+      opacity: 1;
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  @keyframes float-hidden {
+    0% {
+      opacity: 1;
+      left: 50px;
+    }
+    100% {
+      opacity: 0;
+      left: -50px;
+    }
+  }
+}
+
+@keyframes aside-hidden {
+  0% {
+    max-width: 280px;
+    width: 280px;
+    margin: 0 15px;
+    opacity: 1;
+    left: 0;
+  }
+  100% {
+    max-width: 0;
+    width: 0;
+    margin: 0;
+    opacity: 0;
+    left: -280px;
+  }
+}
+
+@keyframes aside-visible {
+  0% {
+    max-width: 0;
+    width: 0;
+    margin: 0;
+    opacity: 0;
+    left: -280px;
+  }
+  100% {
+    max-width: 280px;
+    width: 280px;
+    margin: 0 15px;
+    opacity: 1;
+    left: 0;
+  }
+}
+
+@keyframes card-show {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes text {
+  0% {
+    color: transparent;
+    opacity: 0;
+    background-position: 0 0;
+    text-shadow: 0px 0px 1px rgba(236, 120, 139, 0.1);
+  }
+  100% {
+    color: #fff;
+    opacity: 1;
+    background-position: -100% 0;
+    text-shadow: 0px 0px 8px rgba(236, 120, 139, 0.8);
+  }
+}
+
+@keyframes text-box {
+  0% {
+    letter-spacing: 1.5rem;
+    max-width: 0;
+  }
+  100% {
+    letter-spacing: 0.5rem;
+    max-width: 336.1px;
+  }
+}
