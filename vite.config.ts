@@ -1,10 +1,24 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
+import AutoImport from "unplugin-auto-import/vite";
+import Components from "unplugin-vue-components/vite";
+import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import * as path from "path";
 
 export default defineConfig({
-  plugins: [vue()],
-  base: '', // 生产环境路径
+  plugins: [
+    vue(),
+    // ...
+    AutoImport({
+      imports:['vue','vue-router', 'pinia'],
+      resolvers: [ElementPlusResolver()],
+      dts:"auto-imports.d.ts"
+    }),
+    Components({
+      resolvers: [ElementPlusResolver()],
+    }),
+  ],
+  base: "", // 生产环境路径
   resolve: {
     alias: {
       // 配置别名
@@ -22,10 +36,10 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData:'@import"./src/styles/index.scss";',
+        additionalData: '@import"./src/styles/index.scss";',
         javascriptEnabled: true,
-      }
-    }
+      },
+    },
   },
   build: {
     target: "modules",
@@ -46,7 +60,7 @@ export default defineConfig({
     // 占用端口
     port: 5000,
     // 扩展访问端口
-    host: '0.0.0.0',
+    host: "0.0.0.0",
     proxy: {
       "/api": {
         target: "http://127.0.0.1:80", // 后台接口

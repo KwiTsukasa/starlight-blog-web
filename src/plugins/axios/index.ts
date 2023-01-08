@@ -4,6 +4,7 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
 } from "axios";
+import NProgress from "nprogress";
 import { ElMessage } from "element-plus";
 // 数据返回的接口
 // 定义请求响应参数，不含data
@@ -56,6 +57,7 @@ class RequestHttp {
       },
       (error: AxiosError) => {
         // 请求报错
+        NProgress.done();
         Promise.reject(error);
       }
     );
@@ -73,6 +75,7 @@ class RequestHttp {
           return Promise.reject(data);
         } // 全局错误信息拦截（防止下载文件得时候返回数据流，没有code，直接报错）
         if (data.code && data.code !== RequestEnums.SUCCESS) {
+          NProgress.done();
           ElMessage.error(data); // 此处也可以使用组件提示报错信息
           return Promise.reject(data);
         }
@@ -84,6 +87,7 @@ class RequestHttp {
           this.handleCode(response.status);
         }
         if (!window.navigator.onLine) {
+          NProgress.done();
           ElMessage.error("网络连接失败"); // 可以跳转到错误页面，也可以不做操作 // return router.replace({ //   path: '/404' // });
         }
       }
@@ -92,9 +96,11 @@ class RequestHttp {
   handleCode(code: number): void {
     switch (code) {
       case 401:
+        NProgress.done();
         ElMessage.error("登录失败，请重新登录");
         break;
       default:
+        NProgress.done();
         ElMessage.error("请求失败");
         break;
     }
@@ -102,15 +108,19 @@ class RequestHttp {
 
   // 常用方法封装
   get<T>(url: string, params?: object): Promise<ResultData<T>> {
+    NProgress.start();
     return this.service.get(url, { params });
   }
   post<T>(url: string, params?: object): Promise<ResultData<T>> {
+    NProgress.start();
     return this.service.post(url, params);
   }
   put<T>(url: string, params?: object): Promise<ResultData<T>> {
+    NProgress.start();
     return this.service.put(url, params);
   }
   delete<T>(url: string, params?: object): Promise<ResultData<T>> {
+    NProgress.start();
     return this.service.delete(url, { params });
   }
 }

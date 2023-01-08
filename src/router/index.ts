@@ -1,9 +1,7 @@
 import { App } from 'vue';
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
 import { useUserStore } from '@/store';
-import { storeToRefs } from 'pinia';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -16,21 +14,33 @@ const routes: Array<RouteRecordRaw> = [
     name: "login",
     component: () => import("@/views/login/index.vue"),
     meta: {
-      title: "首页",
+      title: "登录",
     },
   },
   {
     path: "/home",
     name: "home",
     component: () => import("@/views/wel/index.vue"),
-    meta: {
-      title: "首页",
-    },
+    children:[
+      {
+        path: "",
+        name: "homeIndex",
+        component:() => import("@/views/allBlog/index.vue"),
+      },
+      {
+        path:"/home/myBlog",
+        name:"myBlog",
+        component:() => import("@/views/myBlog/index.vue"),
+        meta:{
+          title:"我的博客",
+        }
+      }
+    ]
   },
 ];
 
 export const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 });
 
