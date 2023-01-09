@@ -1,8 +1,3 @@
-@font-face {
-  font-family: Comfortaa;
-  src: url("@/styles/fonts/Comfortaa/Comfortaa-Regular-1.ttf");
-}
-
 .light-container {
   @include theme-style("light", $light, $light-linear, $primary);
 }
