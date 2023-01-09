@@ -3,6 +3,7 @@ import vue from "@vitejs/plugin-vue";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
+import viteCompression from 'vite-plugin-compression';
 import * as path from "path";
 
 export default defineConfig({
@@ -10,12 +11,19 @@ export default defineConfig({
     vue(),
     // ...
     AutoImport({
-      imports:['vue','vue-router', 'pinia'],
+      imports: ["vue", "vue-router", "pinia"],
       resolvers: [ElementPlusResolver()],
-      dts:"auto-imports.d.ts"
+      dts: "auto-imports.d.ts",
     }),
     Components({
       resolvers: [ElementPlusResolver()],
+    }),
+    viteCompression({
+      verbose: true,
+      disable: false,
+      threshold: 10240,
+      algorithm: "gzip",
+      ext: ".gz",
     }),
   ],
   base: "", // 生产环境路径

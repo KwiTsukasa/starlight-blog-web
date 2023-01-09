@@ -1,5 +1,32 @@
 <template>
-  <div :class="classSetting.themeModel" @scroll="scro1lChange" ref="mainScroll">
+  <Layout @scroll="scro1lChange">
+    <header-bar ref="headerBarRef">
+      <top-box
+        v-model:drawer-visible="drawerVisible"
+        v-model:name="userInfo.user_name"
+      />
+      <top-seacrch-input
+        v-model:value="topSearch"
+        v-model:visible="topSearchActive"
+      />
+    </header-bar>
+    <blog-title v-model:name="userInfo.user_name" />
+    <blog-container>
+      <blog-container-main>
+        <router-view v-slot="{ Component }">
+          <component :is="Component" />
+        </router-view>
+        <blog-footer />
+      </blog-container-main>
+      <aside-container>
+        <aside-title
+          v-model:name="userInfo.user_name"
+          v-model:value="leftSearch"
+          v-model:visible="leftSearchActive"
+        />
+        <aside-info ref="asideInfoRef"> </aside-info>
+      </aside-container>
+    </blog-container>
     <el-backtop
       :right="50"
       :bottom="150"
@@ -83,40 +110,6 @@
         </div>
       </div>
     </el-popover>
-    <div class="blog-header" ref="headerBarRef">
-      <div class="blog-header-container">
-        <top-box
-          v-model:drawer-visible="drawerVisible"
-          v-model:name="userInfo.user_name"
-        />
-        <top-seacrch-input
-          v-model:value="topSearch"
-          v-model:visible="topSearchActive"
-        />
-        <div style="clear: both"></div>
-      </div>
-    </div>
-    <div class="blog-title">
-      <blog-title v-model:name="userInfo.user_name" />
-    </div>
-    <div class="blog-container">
-      <div class="blog-container-main">
-        <router-view v-slot="{ Component }">
-          <component :is="Component" />
-        </router-view>
-        <blog-footer />
-      </div>
-      <div class="blog-container-aside">
-        <aside-title
-          v-model:name="userInfo.user_name"
-          v-model:value="leftSearch"
-          v-model:visible="leftSearchActive"
-        />
-        <div class="blog-container-aside-info card" ref="asideInfoRef">
-          <aside-info />
-        </div>
-      </div>
-    </div>
     <el-drawer
       v-model="drawerVisible"
       :with-header="false"
@@ -134,7 +127,7 @@
         <div class="search-button"></div>
       </div>
     </el-drawer>
-  </div>
+  </Layout>
 </template>
 
 <script setup lang="ts">
@@ -147,9 +140,8 @@ import { debounce } from "lodash";
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
 
-const headerBarRef = ref<HTMLElement>(null);
-const mainScroll = ref<HTMLElement>();
-const asideInfoRef = ref<HTMLElement>(null);
+const headerBarRef = ref(null);
+const asideInfoRef = ref(null);
 const oldScrollTop = ref<number>(0);
 
 const backgroundColor = (scrollTop: number) => {
@@ -171,8 +163,8 @@ const backgroundColor = (scrollTop: number) => {
 
 const scro1lChange = (e) => {
   let scrollTop = e.srcElement.scrollTop;
-  let headerStyle = headerBarRef.value.style;
-  let asideInfoStyle = asideInfoRef.value.style;
+  let headerStyle = headerBarRef.value.$el.style;
+  let asideInfoStyle = asideInfoRef.value.$el.style;
   headerStyle.backgroundColor = backgroundColor(scrollTop);
   headerStyle.backdropFilter = "blur(16px)";
   if (scrollTop === 0) {
@@ -184,7 +176,6 @@ const scro1lChange = (e) => {
     headerStyle.top = "-54px";
     asideInfoStyle.top = "15px";
   }
-
   oldScrollTop.value = scrollTop;
 };
 
@@ -200,7 +191,7 @@ const themeStore = useThemeStore();
 const { classSetting } = storeToRefs(themeStore);
 const changeHeaderTheme = () => {
   if (headerBarRef.value) {
-    let headerStyle = headerBarRef.value.style;
+    let headerStyle = headerBarRef.value.$el.style;
     headerStyle.backgroundColor = backgroundColor(oldScrollTop.value);
   }
 };
@@ -228,7 +219,7 @@ const changeThemeColor = debounce(
 );
 
 changeThemeColor(classSetting.value.themeColor);
-changeFont(classSetting.value.font)
+changeFont(classSetting.value.font);
 
 watch(
   () => classSetting.value.themeColor,
@@ -243,7 +234,6 @@ watch(
 
 <style lang="scss">
 @import "@/styles/blog/blog.scss";
-
 .light {
   * {
     color: $dark;

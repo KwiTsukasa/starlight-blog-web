@@ -24,10 +24,6 @@
   flex-direction: column;
   overflow-y: overlay;
   overflow-x: hidden;
-  background-image: url("/ykeU5.png");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
   @if ($theme-type == "dark") {
     &::before {
       content: "";
@@ -95,6 +91,7 @@
         font-size: 1rem;
         letter-spacing: 1px;
         text-transform: none;
+        border: none !important;
         transition: all ease 0.3s;
         &:hover {
           color: rgba(255, 255, 255, 0.65) !important;

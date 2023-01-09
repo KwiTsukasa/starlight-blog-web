@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import { User, Lock, Pointer } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
@@ -60,7 +60,7 @@ const changeCode = () => {
   codeImg.value = "/api/user/getImage?rand=" + Math.random();
 };
 
-const loginFormRef = reactive<FormInstance>(null);
+const loginFormRef = ref<FormInstance>();
 const loginForm = ref<LoginForm>({
   username: "",
   password: "",
@@ -76,7 +76,7 @@ const getUser = () => {
   getUserInfo().then((res) => {
     userStore.setUserInfo(res);
     userStore.setLoginState(true);
-    router.push("/home");
+    router.push("/home/allBlog");
   })
 }
 const submitForm = async (formEl: FormInstance | undefined) => {

@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import { User, Lock, Pointer, Message } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
@@ -64,7 +64,7 @@ const changeCode = () => {
   codeImg.value = "/api/user/getImage?rand=" + Math.random();
 };
 
-const registerFormRef = reactive<FormInstance>(null);
+const registerFormRef = ref<FormInstance>();
 const registerForm = ref<RegisterForm>({
   username: "",
   useremail: "",

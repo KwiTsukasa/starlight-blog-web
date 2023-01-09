@@ -13,13 +13,15 @@ type UserInfo = {
 export const useUserStore = defineStore("userInfo", {
   state: () => {
     return {
-      userInfo:{} as UserInfo,
+      userInfo: {
+        user_name: "StarLightBlog",
+      } as UserInfo,
       loginState: false,
     };
   },
 
   actions: {
-    setUserInfo(userInfo:UserInfo) {
+    setUserInfo(userInfo: UserInfo) {
       this.userInfo = userInfo;
     },
     setLoginState(loginState) {
@@ -27,12 +29,15 @@ export const useUserStore = defineStore("userInfo", {
     },
     //退出清空登录信息
     setUserLogout() {
-      router.push("/login");
+      this.setUserInfo({
+        user_name: "StarLightBlog",
+      });
       this.setLoginState(false);
+      router.push("/home/login");
     },
   },
   persist: {
-    paths: ["loginState","userInfo"],
+    paths: ["loginState", "userInfo"],
   },
 });
 
