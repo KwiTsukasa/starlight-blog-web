@@ -5,6 +5,8 @@
   --H: 231;
   --S: 71;
   --L: 63;
+  --theme-font: "Comfortaa", "Helvetica Neue", Helvetica, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
   --el-bg-color-overlay: rgb(
     calc(var(--R) + (255 - var(--R)) * 0.92),
     calc(var(--G) + (255 - var(--G)) * 0.92),
@@ -62,3 +64,5 @@ $dark-linear: rgb(
   calc(30 * 0.86 + $B * (1 - 0.86))
 );
 $dark-float: hsl($H, calc($S * 1%), max(calc($L * 1% - 10%), 0%));
+
+$theme-font: var(--theme-font);

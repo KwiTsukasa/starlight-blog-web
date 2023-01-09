@@ -9,6 +9,12 @@ body {
   margin: 0;
   height: 100%;
   width: 100%;
+  * {
+    font-family: $theme-font !important;
+  }
+  input::-webkit-input-placeholder {
+    font-family: $theme-font !important;
+  }
 }
 div {
   box-sizing: border-box;
@@ -57,6 +63,6 @@ div {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(94, 114, 228, 0.6);
+  background-color: rgba($R, $G, $B, 0.6);
   transition: background-color ease 0.5s;
 }

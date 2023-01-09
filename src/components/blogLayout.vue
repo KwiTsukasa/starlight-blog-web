@@ -1,9 +1,5 @@
 <template>
-  <div
-    :class="classSetting.themeModel + ' ' + classSetting.font"
-    @scroll="scro1lChange"
-    ref="mainScroll"
-  >
+  <div :class="classSetting.themeModel" @scroll="scro1lChange" ref="mainScroll">
     <el-backtop
       :right="50"
       :bottom="150"
@@ -68,6 +64,7 @@
           <div class="pop-label">字体：</div>
           <el-radio-group
             v-model="classSetting.font"
+            @change="changeFont"
             :class="
               classSetting.themeModel === 'light-container' ? 'light' : 'dark'
             "
@@ -144,7 +141,7 @@
 import { Sunny, Moon } from "@element-plus/icons-vue";
 import { useUserStore, useThemeStore } from "@/store";
 import { ColorPickerInstance } from "element-plus";
-import Color from "@/util/color";
+import Theme from "@/util/theme";
 import { debounce } from "lodash";
 
 const userStore = useUserStore();
@@ -207,17 +204,31 @@ const changeHeaderTheme = () => {
     headerStyle.backgroundColor = backgroundColor(oldScrollTop.value);
   }
 };
+const changeFont = (val: string) => {
+  if (val === "Comfortaa") {
+    Theme.changeFont(`"Comfortaa", "Helvetica Neue", Helvetica, "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif`);
+  } else {
+    Theme.changeFont(`"Helvetica Neue", Helvetica, "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif`);
+  }
+};
 
-const changeThemeColor = debounce((color: string) => {
-  classSetting.value.themeColor = color;
-  Color.changeTheme(color);
-  changeHeaderTheme();
-},1,{
-  'leading': true,
-  'trailing': false
-});
+const changeThemeColor = debounce(
+  (color: string) => {
+    classSetting.value.themeColor = color;
+    Theme.changeTheme(color);
+    changeHeaderTheme();
+  },
+  1,
+  {
+    leading: true,
+    trailing: false,
+  }
+);
 
 changeThemeColor(classSetting.value.themeColor);
+changeFont(classSetting.value.font)
 
 watch(
   () => classSetting.value.themeColor,

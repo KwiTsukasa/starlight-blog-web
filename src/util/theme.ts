@@ -1,16 +1,14 @@
-export default class Color {
-  private static node: HTMLElement = document.documentElement;
-  private static pre: string = "--el-color-primary";
-  private static mixWhite: string = "#ffffff";
-  
-  public static hexTorgb(color: string): number[] {
+export default {
+  node: document.documentElement,
+  pre: "--el-color-primary",
+  mixWhite: "#ffffff",
+  hexTorgb(color: string): number[] {
     const r = parseInt(color.substring(1, 3), 16);
     const g = parseInt(color.substring(3, 5), 16);
     const b = parseInt(color.substring(5, 7), 16);
     return [r, g, b];
-  }
-
-  public static rgbToHsl(R: number, G: number, B: number): number[] {
+  },
+  rgbToHsl(R: number, G: number, B: number): number[] {
     const r = R / 255;
     const g = G / 255;
     const b = B / 255;
@@ -41,16 +39,14 @@ export default class Color {
       s = delta / (2 - max - min);
     }
     return [h, s, l];
-  }
-
-  public static rgbToHex(R: number, G: number, B: number): string[] {
+  },
+  rgbToHex(R: number, G: number, B: number): string[] {
     const r = ("0" + (R || 0).toString(16)).slice(-2);
     const g = ("0" + (G || 0).toString(16)).slice(-2);
     const b = ("0" + (B || 0).toString(16)).slice(-2);
     return [r, g, b];
-  }
-
-  public static minColorScale(
+  },
+  minColorScale(
     [R1, G1, B1]: number[],
     [R2, B2, G2]: number[],
     minWeight: number
@@ -59,9 +55,8 @@ export default class Color {
     const g = Math.round(G1 * (1 - minWeight) + B2 * minWeight);
     const b = Math.round(B1 * (1 - minWeight) + G2 * minWeight);
     return [r, g, b];
-  }
-
-  public static mix(color1: string, color2: string, weight: number): string {
+  },
+  mix(color1: string, color2: string, weight: number): string {
     weight = Math.max(Math.min(Number(weight), 1), 0);
     const [r, g, b] = this.minColorScale(
       this.hexTorgb(color1),
@@ -70,9 +65,8 @@ export default class Color {
     );
     const [_r, _g, _b] = this.rgbToHex(r, g, b);
     return "#" + _r + _g + _b;
-  }
-
-  public static changeTheme(color: string): void {
+  },
+  changeTheme(color: string): void {
     const [r, g, b] = this.hexTorgb(color);
     const [h, s, l] = this.rgbToHsl(r, g, b);
     this.node.style.setProperty("--R", r + "");
@@ -88,5 +82,8 @@ export default class Color {
         this.mix(color, this.mixWhite, i * 0.1)
       );
     }
-  }
-}
+  },
+  changeFont(font: string): void {
+    this.node.style.setProperty("--theme-font",font);
+  },
+};
