@@ -2,30 +2,6 @@
   font-family: Comfortaa;
   src: url("@/styles/fonts/Comfortaa/Comfortaa-Regular-1.ttf");
 }
-
-:root {
-  --R: 94;
-  --G: 114;
-  --B: 228;
-  --H: 231;
-  --S: 71;
-  --L: 63;
-  --theme-font: "Comfortaa", "Helvetica Neue", Helvetica, "PingFang SC",
-    "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-  --el-bg-color-overlay: rgb(
-    calc(var(--R) + (255 - var(--R)) * 0.92),
-    calc(var(--G) + (255 - var(--G)) * 0.92),
-    calc(var(--B) + (255 - var(--B)) * 0.92)
-  );
-  --el-popover-bg-color: var(--el-bg-color-overlay);
-  --el-color-black: rgb(
-    calc(25.8 + var(--R) * 0.14),
-    calc(25.8 + var(--G) * 0.14),
-    calc(25.8 + var(--B) * 0.14)
-  );
-  --el-text-color-primary: var(--el-color-black);
-}
-
 $R: var(--R);
 $G: var(--G);
 $B: var(--B);
@@ -71,3 +47,18 @@ $dark-linear: rgb(
 $dark-float: hsl($H, calc($S * 1%), max(calc($L * 1% - 10%), 0%));
 
 $theme-font: var(--theme-font);
+
+.variable {
+  --el-bg-color-overlay: rgb(
+    calc(var(--R) + (255 - var(--R)) * 0.92),
+    calc(var(--G) + (255 - var(--G)) * 0.92),
+    calc(var(--B) + (255 - var(--B)) * 0.92)
+  );
+  --el-popover-bg-color: var(--el-bg-color-overlay);
+  --el-color-black: rgb(
+    calc(25.8 + var(--R) * 0.14),
+    calc(25.8 + var(--G) * 0.14),
+    calc(25.8 + var(--B) * 0.14)
+  );
+  --el-text-color-primary: var(--el-color-black);
+}

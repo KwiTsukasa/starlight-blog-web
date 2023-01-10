@@ -1,5 +1,9 @@
 <template>
-  <Layout @scroll="scro1lChange">
+  <Layout
+    @scroll="scro1lChange"
+    :style="{ ...theme, ...elMixin }"
+    class="variable"
+  >
     <header-bar ref="headerBarRef">
       <top-box
         v-model:drawer-visible="drawerVisible"
@@ -18,13 +22,13 @@
         </router-view>
         <blog-footer />
       </blog-container-main>
-      <aside-container>
+      <aside-container ref="asideInfoRef">
         <aside-title
           v-model:name="userInfo.user_name"
           v-model:value="leftSearch"
           v-model:visible="leftSearchActive"
         />
-        <aside-info ref="asideInfoRef"> </aside-info>
+        <aside-info> </aside-info>
       </aside-container>
     </blog-container>
     <el-backtop
@@ -51,6 +55,7 @@
       placement="left-end"
       :visible="settingVisible"
       width="fit-content"
+      :teleported="false"
       :effect="classSetting.themeModel === 'light-container' ? 'light' : 'dark'"
     >
       <template #reference>
@@ -171,10 +176,10 @@ const scro1lChange = (e) => {
     headerStyle.backdropFilter = "blur(1px)";
   } else if (oldScrollTop.value > scrollTop) {
     headerStyle.top = "0";
-    asideInfoStyle.top = "69px";
+    asideInfoStyle.top = "-197px";
   } else if (scrollTop > 600) {
     headerStyle.top = "-54px";
-    asideInfoStyle.top = "15px";
+    asideInfoStyle.top = "-251px";
   }
   oldScrollTop.value = scrollTop;
 };
@@ -189,6 +194,19 @@ const settingVisible = ref<boolean>(false);
 const colorPicker = ref<ColorPickerInstance>();
 const themeStore = useThemeStore();
 const { classSetting } = storeToRefs(themeStore);
+const theme = ref<ThemeColorInterface>({
+  "--R": 94,
+  "--G": 114,
+  "--B": 228,
+  "--H": 231,
+  "--S": 71,
+  "--L": 63,
+  "--theme-font": `"Comfortaa", "Helvetica Neue", Helvetica, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif`,
+  "--el-color-primary": "#5e72e4",
+});
+const elMixin = ref<ElMixinColor>({});
+
 const changeHeaderTheme = () => {
   if (headerBarRef.value) {
     let headerStyle = headerBarRef.value.$el.style;
@@ -197,18 +215,24 @@ const changeHeaderTheme = () => {
 };
 const changeFont = (val: string) => {
   if (val === "Comfortaa") {
-    Theme.changeFont(`"Comfortaa", "Helvetica Neue", Helvetica, "PingFang SC",
-      "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif`);
+    Theme.changeFont(
+      `"Comfortaa", "Helvetica Neue", Helvetica, "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif`,
+      theme.value
+    );
   } else {
-    Theme.changeFont(`"Helvetica Neue", Helvetica, "PingFang SC",
-      "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif`);
+    Theme.changeFont(
+      `"Helvetica Neue", Helvetica, "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif`,
+      theme.value
+    );
   }
 };
 
 const changeThemeColor = debounce(
   (color: string) => {
     classSetting.value.themeColor = color;
-    Theme.changeTheme(color);
+    Theme.changeTheme(color, theme.value, elMixin.value);
     changeHeaderTheme();
   },
   1,
@@ -231,9 +255,7 @@ watch(
   }
 );
 </script>
-
 <style lang="scss">
-@import "@/styles/blog/blog.scss";
 .light {
   * {
     color: $dark;
@@ -270,7 +292,6 @@ watch(
   }
 }
 </style>
-
 <style lang="scss" scoped>
 @media screen and (min-width: 1451px) {
   ::v-deep(.el-backtop) {

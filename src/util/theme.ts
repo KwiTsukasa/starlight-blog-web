@@ -1,6 +1,4 @@
 export default {
-  node: document.documentElement,
-  pre: "--el-color-primary",
   mixWhite: "#ffffff",
   hexTorgb(color: string): number[] {
     const r = parseInt(color.substring(1, 3), 16);
@@ -66,24 +64,26 @@ export default {
     const [_r, _g, _b] = this.rgbToHex(r, g, b);
     return "#" + _r + _g + _b;
   },
-  changeTheme(color: string): void {
+  changeTheme(
+    color: string,
+    theme: ThemeColorInterface,
+    elMixin: ElMixinColor
+  ): void {
     const [r, g, b] = this.hexTorgb(color);
     const [h, s, l] = this.rgbToHsl(r, g, b);
-    this.node.style.setProperty("--R", r + "");
-    this.node.style.setProperty("--G", g + "");
-    this.node.style.setProperty("--B", b + "");
-    this.node.style.setProperty("--H", h + "");
-    this.node.style.setProperty("--S", s * 100 + "");
-    this.node.style.setProperty("--L", l * 100 + "");
-    this.node.style.setProperty(this.pre, color);
+    theme["--R"] = r;
+    theme["--G"] = g;
+    theme["--B"] = b;
+    theme["--H"] = h;
+    theme["--S"] = s * 100;
+    theme["--L"] = l * 100;
+    theme["--el-color-primary"] = color;
     for (let i = 1; i < 10; i += 1) {
-      this.node.style.setProperty(
-        `${this.pre}-light-${i}`,
-        this.mix(color, this.mixWhite, i * 0.1)
-      );
+      const mixin = "--el-color-primary-light-" + i;
+      elMixin[mixin] = this.mix(color, this.mixWhite, i * 0.1);
     }
   },
-  changeFont(font: string): void {
-    this.node.style.setProperty("--theme-font",font);
+  changeFont(font: string, theme: ThemeColorInterface): void {
+    theme["--theme-font"] = font;
   },
 };

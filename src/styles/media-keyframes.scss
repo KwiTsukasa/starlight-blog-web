@@ -40,34 +40,26 @@
 @keyframes aside-hidden {
   0% {
     max-width: 280px;
-    width: 280px;
     margin: 0 15px;
     opacity: 1;
     left: 0;
   }
   100% {
     max-width: 0;
-    width: 0;
     margin: 0;
     opacity: 0;
-    left: -280px;
   }
 }
 
 @keyframes aside-visible {
   0% {
-    max-width: 0;
-    width: 0;
     margin: 0;
     opacity: 0;
-    left: -280px;
   }
   100% {
-    max-width: 280px;
     width: 280px;
     margin: 0 15px;
     opacity: 1;
-    left: 0;
   }
 }
 
