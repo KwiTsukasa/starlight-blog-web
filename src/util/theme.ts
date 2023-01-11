@@ -36,7 +36,7 @@ export default {
     } else {
       s = delta / (2 - max - min);
     }
-    return [h, s, l];
+    return [Math.round(h), Math.round(s * 100), Math.round(l * 100)];
   },
   rgbToHex(R: number, G: number, B: number): string[] {
     const r = ("0" + (R || 0).toString(16)).slice(-2);
@@ -75,8 +75,8 @@ export default {
     theme["--G"] = g;
     theme["--B"] = b;
     theme["--H"] = h;
-    theme["--S"] = s * 100;
-    theme["--L"] = l * 100;
+    theme["--S"] = s;
+    theme["--L"] = l;
     theme["--el-color-primary"] = color;
     for (let i = 1; i < 10; i += 1) {
       const mixin = "--el-color-primary-light-" + i;
