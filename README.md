@@ -4,7 +4,7 @@
 
 ## 主题样式
 
-默认主题系统根据全局`:root`内`--R`、`--G`、`--B`、`--H`、`--S`、`--L`变量自动计算`rgb`、`hsl`色彩模式生成`light`、`dark`两套主题
+默认主题系统根据`@/store/modules/theme.ts`文件内`themeColor`主题色变量变量自动计算`rgb`、`hsl`色彩模式生成`light`、`dark`两套主题
 
 默认字体分别为`Comfortaa`、`Helvetica Neue`两套字体并实现动态切换
 
