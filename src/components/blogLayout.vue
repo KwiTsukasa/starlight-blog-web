@@ -25,6 +25,7 @@
       <aside-container ref="asideInfoRef">
         <aside-title
           v-model:name="userInfo.user_name"
+          v-model:profile="userInfo.user_profile"
           v-model:value="leftSearch"
           v-model:visible="leftSearchActive"
         />
@@ -126,7 +127,7 @@
         <div class="user-label">
           <div class="label-text">
             <p class="title">{{ userInfo.user_name }}的博客</p>
-            <span class="dic">{{ userInfo.user_name }}</span>
+            <span class="dic">{{ userInfo.user_profile }}</span>
           </div>
         </div>
         <div class="search-button"></div>

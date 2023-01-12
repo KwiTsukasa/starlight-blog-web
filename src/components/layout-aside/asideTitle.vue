@@ -3,7 +3,7 @@
     <div class="user-label">
       <div class="label-text">
         <p class="title">{{ name }}的博客</p>
-        <span class="dic">{{ name }}</span>
+        <span class="dic">{{ profile }}</span>
       </div>
     </div>
     <div class="search-button"></div>
@@ -13,11 +13,12 @@
 <script setup lang="ts">
 type Props = {
   name: string;
+  profile:string;
   visible: boolean;
   value: string;
 };
 const props = defineProps<Props>();
-const { name, value, visible } = toRefs(props);
+const { name, profile,value, visible } = toRefs(props);
 
 const emits = defineEmits(["update:visible", "update:value"]);
 </script>

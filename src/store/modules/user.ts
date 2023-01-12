@@ -8,6 +8,7 @@ type UserInfo = {
   user_psd: string;
   user_email: string;
   user_img: string;
+  user_profile:string;
 };
 
 export const useUserStore = defineStore("userInfo", {

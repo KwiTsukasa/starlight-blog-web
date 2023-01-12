@@ -7,14 +7,14 @@
   >
     <el-form-item prop="username">
       <el-input
-        v-model="loginForm.username"
+        v-model="loginForm.user_name"
         :prefix-icon="User"
         placeholder="请输入用户名"
       ></el-input>
     </el-form-item>
     <el-form-item prop="password">
       <el-input
-        v-model="loginForm.password"
+        v-model="loginForm.user_psd"
         :prefix-icon="Lock"
         type="password"
         show-password
@@ -29,7 +29,7 @@
         placeholder="请输入验证码"
       >
         <template #append>
-          <canvas id="canvas" width="130px" height="33px" @click=""> </canvas>
+          <img :src="codeImg" @click="changeCode" />
         </template>
       </el-input>
     </el-form-item>
@@ -55,39 +55,39 @@ import { getUserInfo } from "@/apis/user";
 import { router } from "@/router";
 import { useUserStore } from "@/store";
 
+const codeImg = ref<string>("/api/user/authcode?rand=" + Math.random());
+const changeCode = () => {
+  codeImg.value = "/api/user/authcode?rand=" + Math.random();
+};
+
 const loginFormRef = ref<FormInstance>();
 const loginForm = ref<LoginForm>({
-  username: "",
-  password: "",
+  user_name: "",
+  user_psd: "",
   code: "",
 });
 const loginRules: FormRules = {
-  username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
-  password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+  user_name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+  user_psd: [{ required: true, message: "请输入密码", trigger: "blur" }],
   code: [{ required: true, message: "请输入验证码", trigger: "blur" }],
 };
 const userStore = useUserStore();
-const getUser = () => {
-  getUserInfo().then((res) => {
-    userStore.setUserInfo(res);
-    userStore.setLoginState(true);
-    router.push("/home/allBlog");
-  });
-};
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      getLogin(loginForm.value).then((res: number) => {
-        if (res > 0) {
+      getLogin(loginForm.value).then((res) => {
+        if (res.data) {
           ElMessage({
-            message: "登录成功",
+            message: res.msg,
             type: "success",
           });
-          getUser();
+          userStore.setUserInfo(res.data);
+          userStore.setLoginState(true);
+          router.push("/home/allBlog");
         } else {
           ElMessage({
-            message: res ? "验证码错误" : "用户名或密码错误",
+            message: res.msg,
             type: "error",
           });
         }

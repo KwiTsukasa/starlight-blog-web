@@ -1,6 +1,6 @@
 interface LoginForm {
-    username:string,
-    password:string,
+    user_name:string,
+    user_psd:string,
     code:string,
 }
 
