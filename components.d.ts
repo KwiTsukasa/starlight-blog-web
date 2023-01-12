@@ -15,6 +15,7 @@ declare module '@vue/runtime-core' {
     BlogFooter: typeof import('./src/components/layout-footer/blogFooter.vue')['default']
     BlogLayout: typeof import('./src/components/blogLayout.vue')['default']
     BlogTitle: typeof import('./src/components/layout-title/blogTitle.vue')['default']
+    CodeImge: typeof import('./src/components/VerCode/codeImge.vue')['default']
     ElBacktop: typeof import('element-plus/es')['ElBacktop']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElColorPicker: typeof import('element-plus/es')['ElColorPicker']
