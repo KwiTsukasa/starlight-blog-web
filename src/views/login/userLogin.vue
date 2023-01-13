@@ -7,14 +7,14 @@
   >
     <el-form-item prop="username">
       <el-input
-        v-model="loginForm.user_name"
+        v-model="loginForm.username"
         :prefix-icon="User"
         placeholder="请输入用户名"
       ></el-input>
     </el-form-item>
     <el-form-item prop="password">
       <el-input
-        v-model="loginForm.user_psd"
+        v-model="loginForm.password"
         :prefix-icon="Lock"
         type="password"
         show-password
@@ -48,10 +48,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { User, Lock, Pointer } from "@element-plus/icons-vue";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElForm, ElFormItem, ElInput, ElButton } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
 import { getLogin } from "@/apis/login";
-import { getUserInfo } from "@/apis/user";
 import { router } from "@/router";
 import { useUserStore } from "@/store";
 
@@ -62,13 +61,13 @@ const changeCode = () => {
 
 const loginFormRef = ref<FormInstance>();
 const loginForm = ref<LoginForm>({
-  user_name: "",
-  user_psd: "",
+  username: "",
+  password: "",
   code: "",
 });
 const loginRules: FormRules = {
-  user_name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
-  user_psd: [{ required: true, message: "请输入密码", trigger: "blur" }],
+  username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+  password: [{ required: true, message: "请输入密码", trigger: "blur" }],
   code: [{ required: true, message: "请输入验证码", trigger: "blur" }],
 };
 const userStore = useUserStore();
@@ -77,20 +76,13 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   await formEl.validate((valid, fields) => {
     if (valid) {
       getLogin(loginForm.value).then((res) => {
-        if (res.data) {
-          ElMessage({
-            message: res.msg,
-            type: "success",
-          });
-          userStore.setUserInfo(res.data);
-          userStore.setLoginState(true);
-          router.push("/home/allBlog");
-        } else {
-          ElMessage({
-            message: res.msg,
-            type: "error",
-          });
-        }
+        ElMessage({
+          message: res.msg,
+          type: "success",
+        });
+        userStore.setUserInfo(res.data);
+        userStore.setLoginState(true);
+        router.push("/home/allBlog");
       });
     } else {
       console.log("error submit!", fields);

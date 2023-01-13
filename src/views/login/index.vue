@@ -21,6 +21,7 @@
 </template>
 
 <script setup lang="ts">
+import { ElTabs,ElTabPane} from "element-plus";
 import userLogin from "./userLogin.vue";
 import userRegister from "./userRegister.vue";
 const activeName = ref<string>("user");
@@ -33,25 +34,31 @@ const activeName = ref<string>("user");
   &__box {
     width: 100%;
     margin: 0 auto;
-    box-shadow: 0 8px 52px 0 rgb(0 0 0 / 14%);
     display: flex;
     border-radius: 6px;
     overflow: hidden;
-    background: #fff;
     margin-bottom: 15px;
 
     &-left {
+      position: relative;
+      top: 0;
+      bottom: 9;
       flex: 1;
       height: 500px;
-      background-image: url(@/assets/images/login-left.png);
-      background-position: center;
+      z-index: -1;
+      filter: blur(0.8px);
+      background-image: url("/login.png");
       background-size: cover;
+      background-position: center;
+      animation: form-left 1s forwards ease-in-out;
     }
 
     &-right {
       display: flex;
       align-items: center;
       width: 560px;
+      background: #fff;
+      box-shadow: 0 8px 52px 0 rgb(0 0 0 / 14%);
     }
   }
 

@@ -1,7 +1,7 @@
 import axios from "@/plugins/axios";
 
 export const getLogin: any = (params: LoginForm) => {
-  return axios.post<any>("/api/user/login", params);
+  return axios.post<any>("/api/auth/login", params);
 };
 
 export const getRegister: any = (params: RegisterForm) => {

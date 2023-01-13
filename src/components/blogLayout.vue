@@ -41,7 +41,7 @@
         <el-icon><ArrowUpBold /></el-icon>
       </div>
     </el-backtop>
-    <el-button class="float-box plus-blog">
+    <el-button class="float-box plus-blog" @click="router.push({name:'editorBlog'})">
       <el-icon color="$primary">
         <svg width="30" height="30" viewBox="0 0 48 48">
           <path
@@ -142,6 +142,7 @@ import { useUserStore, useThemeStore } from "@/store";
 import { ColorPickerInstance } from "element-plus";
 import Theme from "@/util/theme";
 import { debounce } from "lodash";
+import { router } from '@/router'
 
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);

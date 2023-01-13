@@ -18,6 +18,7 @@
 		"src/**/*.vue",
 		"auto-imports.d.ts",
 		"components.d.ts",
-		"vite.config.ts"
+		"vite.config.ts",
+    "custom-types.d.ts"
 	]
 }

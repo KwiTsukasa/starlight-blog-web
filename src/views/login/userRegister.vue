@@ -55,13 +55,13 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { User, Lock, Pointer, Message } from "@element-plus/icons-vue";
-import { ElMessage } from "element-plus";
+import { ElMessage,ElForm,ElFormItem,ElInput,ElButton } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
 import { getRegister } from "@/apis/login";
 
-const codeImg = ref<string>("/api/user/getImage?rand=" + Math.random());
+const codeImg = ref<string>("/api/user/authcode?rand=" + Math.random());
 const changeCode = () => {
-  codeImg.value = "/api/user/getImage?rand=" + Math.random();
+  codeImg.value = "/api/user/authcode?rand=" + Math.random();
 };
 
 const registerFormRef = ref<FormInstance>();

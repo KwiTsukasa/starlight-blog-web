@@ -2,23 +2,24 @@ import { App } from "vue";
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import NProgress from "nprogress";
 import { useUserStore } from "@/store";
+import Login from "@/views/login/index.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "",
     name: "index",
-    redirect: "/home/allBlog",
+    redirect: "/home/all-blog",
   },
   {
     path: "/home/login",
     name: "login",
-    component: () => import("@/views/login/index.vue"),
+    component: Login,
     meta: {
       title: "登录",
     },
   },
   {
-    path: "/home/allBlog",
+    path: "/home/all-blog",
     name: "homeIndex",
     component: () => import("@/views/allBlog/index.vue"),
     meta: {
@@ -26,9 +27,17 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
-    path: "/home/myBlog",
+    path: "/home/my-blog",
     name: "myBlog",
     component: () => import("@/views/myBlog/index.vue"),
+    meta: {
+      title: "我的博客",
+    },
+  },
+  {
+    path: "/home/editor-blog",
+    name: "editorBlog",
+    component: () => import("@/views/editBlog/index.vue"),
     meta: {
       title: "我的博客",
     },
@@ -45,14 +54,11 @@ export const setupRouter = (app: App) => {
   const { loginState } = storeToRefs(userStore);
   router.beforeEach((to, from, next) => {
     NProgress.start();
+    console.log(loginState,to.path)
     if (to.path !== "/home/login" && !loginState.value) {
-      next((vm) => {
-        vm.$router.replace("/home/login");
-      });
+      router.replace("/home/login");
     } else
-      next((vm) => {
-        vm.$router.replace(from.path);
-      });
+      next();
   });
   router.afterEach((to) => {
     NProgress.done();

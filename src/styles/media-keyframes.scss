@@ -100,3 +100,12 @@
     max-width: 336.1px;
   }
 }
+
+@keyframes form-left {
+  0%{
+    right: -500px;
+  }
+  100%{
+    right: 0;
+  }
+}

@@ -84,7 +84,7 @@ class RequestHttp {
       (error: AxiosError) => {
         const { response } = error;
         if (response) {
-          this.handleCode(response.status);
+          this.handleCode(response.data);
         }
         if (!window.navigator.onLine) {
           NProgress.done();
@@ -93,11 +93,11 @@ class RequestHttp {
       }
     );
   }
-  handleCode(code: number): void {
-    switch (code) {
+  handleCode(err): void {
+    switch (err.statusCode) {
       case 401:
         NProgress.done();
-        ElMessage.error("登录失败，请重新登录");
+        ElMessage.error(err.message);
         break;
       default:
         NProgress.done();
