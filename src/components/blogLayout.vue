@@ -7,7 +7,7 @@
     <header-bar ref="headerBarRef">
       <top-box
         v-model:drawer-visible="drawerVisible"
-        v-model:name="userInfo.user_name"
+        :name="userInfo.user_name"
       />
       <top-seacrch-input
         v-model:value="topSearch"
@@ -24,8 +24,8 @@
       </blog-container-main>
       <aside-container ref="asideInfoRef">
         <aside-title
-          v-model:name="userInfo.user_name"
-          v-model:profile="userInfo.user_profile"
+          :name="userInfo.user_name"
+          :profile="userInfo.user_profile"
           v-model:value="leftSearch"
           v-model:visible="leftSearchActive"
         />

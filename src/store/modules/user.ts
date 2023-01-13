@@ -8,7 +8,7 @@ type UserInfo = {
   user_psd: string;
   user_email: string;
   user_img: string;
-  user_profile:string;
+  user_profile: string;
 };
 
 export const useUserStore = defineStore("userInfo", {
@@ -16,6 +16,7 @@ export const useUserStore = defineStore("userInfo", {
     return {
       userInfo: {
         user_name: "StarLightBlog",
+        user_profile: "Revue-StarLight",
       } as UserInfo,
       loginState: false,
     };
@@ -32,6 +33,7 @@ export const useUserStore = defineStore("userInfo", {
     setUserLogout() {
       this.setUserInfo({
         user_name: "StarLightBlog",
+        user_profile: "Revue-StarLight",
       });
       this.setLoginState(false);
       router.push("/home/login");

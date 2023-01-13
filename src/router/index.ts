@@ -38,12 +38,6 @@ const routes: Array<RouteRecordRaw> = [
 export const router = createRouter({
   history: createWebHashHistory(),
   routes,
-  scrollBehavior(to, from, savedPosition) {
-    return {
-      top: 0,
-      behavior: "smooth",
-    };
-  },
 });
 
 export const setupRouter = (app: App) => {
