@@ -22,17 +22,6 @@
       >
       </el-input>
     </el-form-item>
-    <el-form-item prop="code">
-      <el-input
-        v-model="loginForm.code"
-        :prefix-icon="Pointer"
-        placeholder="请输入验证码"
-      >
-        <template #append>
-          <img :src="codeImg" @click="changeCode" />
-        </template>
-      </el-input>
-    </el-form-item>
     <el-form-item>
       <el-button
         type="primary"
@@ -46,29 +35,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { User, Lock, Pointer } from "@element-plus/icons-vue";
-import { ElMessage, ElForm, ElFormItem, ElInput, ElButton } from "element-plus";
+import { User, Lock } from "@element-plus/icons-vue";
 import type { FormInstance, FormRules } from "element-plus";
 import { getLogin } from "@/apis/login";
 import { router } from "@/router";
 import { useUserStore } from "@/store";
 
-const codeImg = ref<string>("/api/user/authcode?rand=" + Math.random());
-const changeCode = () => {
-  codeImg.value = "/api/user/authcode?rand=" + Math.random();
-};
-
 const loginFormRef = ref<FormInstance>();
 const loginForm = ref<LoginForm>({
   username: "",
   password: "",
-  code: "",
 });
 const loginRules: FormRules = {
   username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
   password: [{ required: true, message: "请输入密码", trigger: "blur" }],
-  code: [{ required: true, message: "请输入验证码", trigger: "blur" }],
 };
 const userStore = useUserStore();
 const submitForm = async (formEl: FormInstance | undefined) => {
@@ -77,12 +57,11 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     if (valid) {
       getLogin(loginForm.value).then((res) => {
         ElMessage({
-          message: res.msg,
+          message: res?.msg,
           type: "success",
         });
         userStore.setUserInfo(res.data);
-        userStore.setLoginState(true);
-        router.push("/home/allBlog");
+        router.push("/home/all-blog");
       });
     } else {
       console.log("error submit!", fields);

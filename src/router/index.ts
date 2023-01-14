@@ -51,14 +51,17 @@ export const router = createRouter({
 
 export const setupRouter = (app: App) => {
   const userStore = useUserStore();
-  const { loginState } = storeToRefs(userStore);
+  const { userInfo } = storeToRefs(userStore);
   router.beforeEach((to, from, next) => {
     NProgress.start();
-    console.log(loginState,to.path)
-    if (to.path !== "/home/login" && !loginState.value) {
+    if (
+      to.path !== "/home/login" &&
+      userInfo.value.access_token === "" &&
+      userInfo.value.access_token === undefined &&
+      userInfo.value.access_token === null
+    ) {
       router.replace("/home/login");
-    } else
-      next();
+    } else next();
   });
   router.afterEach((to) => {
     NProgress.done();

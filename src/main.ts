@@ -1,6 +1,5 @@
 import "@/styles/main.scss";
 import "@/styles/blog/blog.scss";
-import "@wangeditor/editor/dist/css/style.css"; 
 import { createApp } from "vue";
 import App from "./App.vue";
 import BlogLayout from "@/components/blogLayout.vue";

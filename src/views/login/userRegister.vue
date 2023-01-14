@@ -55,14 +55,18 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { User, Lock, Pointer, Message } from "@element-plus/icons-vue";
-import { ElMessage,ElForm,ElFormItem,ElInput,ElButton } from "element-plus";
+import { ElMessage, ElForm, ElFormItem, ElInput, ElButton } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
-import { getRegister } from "@/apis/login";
+import { getRegister, getLogin } from "@/apis/login";
+import { useUserStore } from "@/store";
+import { router } from "@/router";
 
 const codeImg = ref<string>("/api/user/authcode?rand=" + Math.random());
 const changeCode = () => {
   codeImg.value = "/api/user/authcode?rand=" + Math.random();
 };
+
+const userStore = useUserStore();
 
 const registerFormRef = ref<FormInstance>();
 const registerForm = ref<RegisterForm>({
@@ -91,21 +95,15 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      getRegister(registerForm.value).then((res: number) => {
-        console.log(res);
-        if (res > 0) {
-          ElMessage({
-            message: "注册成功",
-            type: "success",
-          });
-        } else {
-          ElMessage({
-            message: res
-              ? res === -1
-                ? "验证码错误"
-                : "注册失败"
-              : "用户名已存在",
-            type: "error",
+      getRegister(registerForm.value).then((res) => {
+        if (res) {
+          getLogin(registerForm.value).then((res) => {
+            ElMessage({
+              message: res?.msg,
+              type: "success",
+            });
+            userStore.setUserInfo(res.data);
+            router.push("/home/all-blog");
           });
         }
       });

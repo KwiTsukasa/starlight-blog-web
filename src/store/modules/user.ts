@@ -9,6 +9,7 @@ type UserInfo = {
   user_email: string;
   user_img: string;
   user_profile: string;
+  access_token: string;
 };
 
 export const useUserStore = defineStore("userInfo", {
@@ -18,7 +19,6 @@ export const useUserStore = defineStore("userInfo", {
         user_name: "StarLightBlog",
         user_profile: "Revue-StarLight",
       } as UserInfo,
-      loginState: false,
     };
   },
 
@@ -26,21 +26,17 @@ export const useUserStore = defineStore("userInfo", {
     setUserInfo(userInfo: UserInfo) {
       this.userInfo = userInfo;
     },
-    setLoginState(loginState) {
-      this.loginState = loginState;
-    },
     //退出清空登录信息
     setUserLogout() {
       this.setUserInfo({
         user_name: "StarLightBlog",
         user_profile: "Revue-StarLight",
       });
-      this.setLoginState(false);
       router.push("/home/login");
     },
   },
   persist: {
-    paths: ["loginState", "userInfo"],
+    paths: ["userInfo"],
   },
 });
 

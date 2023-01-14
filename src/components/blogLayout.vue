@@ -7,7 +7,7 @@
     <header-bar ref="headerBarRef">
       <top-box
         v-model:drawer-visible="drawerVisible"
-        :name="userInfo.user_name"
+        v-model:name="userInfo.user_name"
       />
       <top-seacrch-input
         v-model:value="topSearch"

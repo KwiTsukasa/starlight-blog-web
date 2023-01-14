@@ -47,11 +47,15 @@ class RequestHttp {
 
     this.service.interceptors.request.use(
       (config: AxiosRequestConfig) => {
-        const token = localStorage.getItem("token") || "";
+        NProgress.done();
+        const token =
+          JSON.parse(window.localStorage.getItem("userInfo")) === null
+            ? null
+            : JSON.parse(window.localStorage.getItem("userInfo")).userInfo.access_token;
         return {
           ...config,
           headers: {
-            "x-access-token": token, // 请求头中携带token信息
+            "Authorization": 'Bearer ' + token, // 请求头中携带token信息
           },
         };
       },
@@ -70,6 +74,7 @@ class RequestHttp {
       (response: AxiosResponse) => {
         const { data, config } = response; // 解构
         if (data.code === RequestEnums.OVERDUE) {
+          NProgress.done();
           // 登录信息失效，应跳转到登录页面，并清空本地的token
           localStorage.setItem("token", ""); // router.replace({ //   path: '/login' // })
           return Promise.reject(data);
@@ -84,6 +89,7 @@ class RequestHttp {
       (error: AxiosError) => {
         const { response } = error;
         if (response) {
+          NProgress.done();
           this.handleCode(response.data);
         }
         if (!window.navigator.onLine) {

@@ -9,6 +9,18 @@ import * as path from "path";
 export default ({ mode }: ConfigEnv): UserConfig => {
   const env = loadEnv(mode, process.cwd());
   return {
+    optimizeDeps: {
+      include: [
+        "vue",
+        "map-factory",
+        "element-plus/es",
+        "pinia",
+        "axios",
+        "vue-request",
+        "vue-router",
+        "@vueuse/core",
+      ],
+    },
     plugins: [
       vue(),
       // ...
