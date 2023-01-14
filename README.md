@@ -4,7 +4,7 @@
 
 ## 项目简介
 
-此项目为`starlight=blog`前端,基于`vite`、`vue3`、`ts`、`sass`开发
+此项目为`starlight-blog`前端,基于`vite`、`vue3`、`ts`、`sass`开发
 
 项目使用UI库: `Element-Plus`
 
