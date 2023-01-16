@@ -1,7 +1,8 @@
 <template>
   <div class="editor-blog card">
     <div class="go-back">
-      <el-icon :size="30"><ArrowLeftBold /></el-icon>
+      <el-icon :size="35" @click="goBack"><ArrowLeftBold /></el-icon>
+      <span>go&nbsp;Back</span>
     </div>
     <div class="edit">
       <Toolbar
@@ -22,6 +23,7 @@
 <script setup lang="ts">
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import { IToolbarConfig } from "@wangeditor/editor";
+import { router } from "@/router";
 
 const editorRef = shallowRef();
 
@@ -29,10 +31,12 @@ const editorRef = shallowRef();
 const valueHtml = ref<string>("");
 
 // 模拟 ajax 异步获取内容
-onMounted(() => {});
+onMounted(() => {
+  console.log()
+});
 
 const toolbarConfig: Partial<IToolbarConfig> = {
-  excludeKeys: [],
+  excludeKeys: ['fullScreen'],
 };
 const editorConfig = { placeholder: "请输入内容..." };
 
@@ -46,4 +50,11 @@ onBeforeUnmount(() => {
 const handleCreated = (editor) => {
   editorRef.value = editor; // 记录 editor 实例，重要！
 };
+
+const goBack = () => {
+  router.go(-1);
+}
 </script>
+
+<style lang="scss" scoped>
+</style>

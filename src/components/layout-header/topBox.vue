@@ -9,16 +9,28 @@
   </div>
   <div class="center-container">
     <div class="home-img">
-      <el-dropdown>
+      <el-dropdown v-if="userInfo.access_token">
         <el-button link>
           <img src="/title.ico" />
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item><el-button link @click="userStore.setUserLogout">登出账号</el-button></el-dropdown-item>
+            <el-dropdown-item
+              ><el-button link @click="changeRouter('userInfo')"
+                >个人信息</el-button
+              ></el-dropdown-item
+            >
+            <el-dropdown-item
+              ><el-button link @click="userStore.setUserLogout"
+                >登出账号</el-button
+              ></el-dropdown-item
+            >
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+      <el-button link @click="changeRouter('login')" v-else
+        ><img src="/title.ico"
+      /></el-button>
     </div>
     <div class="home-title">
       <el-button link @click="changeRouter('myBlog')"
@@ -29,7 +41,7 @@
       <el-button link @click="changeRouter('homeIndex')">全部博客</el-button>
     </div>
     <div class="workspace">
-      <el-button link>工作台</el-button>
+      <el-button link @click="changeRouter('workSpace')">工作台</el-button>
     </div>
   </div>
 </template>
@@ -43,6 +55,7 @@ type Props = {
 };
 
 const userStore = useUserStore();
+const { userInfo } = storeToRefs(userStore);
 const props = defineProps<Props>();
 const { drawerVisible, name } = toRefs(props);
 

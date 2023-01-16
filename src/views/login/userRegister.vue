@@ -55,7 +55,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { User, Lock, Pointer, Message } from "@element-plus/icons-vue";
-import { ElMessage, ElForm, ElFormItem, ElInput, ElButton } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
 import { getRegister, getLogin } from "@/apis/login";
 import { useUserStore } from "@/store";

@@ -192,10 +192,11 @@
 
 @mixin blog-title {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  height: 250px;
-  line-height: 250px;
-  text-align: center;
+  min-height: 250px;
   filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
   &::after {
     content: "";
@@ -214,12 +215,12 @@
   }
   span {
     display: inline-block;
-    height: 100%;
     animation: text-box var(--box) ease;
     animation-fill-mode: forwards;
     overflow: hidden;
     white-space: nowrap;
     span {
+      cursor: default;
       height: fit-content;
       font-size: 3em;
       font-weight: bold;
@@ -247,7 +248,9 @@
   flex-direction: row-reverse;
   @include list-aside($theme-color, $theme-label-bg);
   @include list-main($theme-color, $theme-label-bg);
-  @include edit-blog($theme-color);
+  @include edit-blog($theme-type, $theme-color);
+  @include work-space($theme-type, $theme-color);
+  @include user-info($theme-type, $theme-color);
   @media screen and (max-width: 900px) {
     &-aside {
       animation: aside-hidden 0.5s forwards;
@@ -319,11 +322,12 @@
       transition: all ease 0.2s;
     }
     &-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       max-width: 100%;
       height: 100px;
       margin-bottom: 20px;
-      text-align: center;
-      line-height: 100px;
       color: $light;
       font-size: 1.2em;
       font-weight: bold;
@@ -333,7 +337,7 @@
   }
 }
 
-@mixin edit-blog($theme-color) {
+@mixin edit-blog($theme-type, $theme-color) {
   .editor-blog {
     box-sizing: border-box;
     padding: 20px 20px;
@@ -350,10 +354,70 @@
       overflow: hidden;
     }
     .go-back {
+      display: flex;
+      align-items: center;
       width: 100%;
       height: 30px;
       margin-bottom: 20px;
+      line-height: 30px;
+      color: $primary;
+      font-size: 20px;
+      overflow: hidden;
+      @if ($theme-type == "dark") {
+        color: #fff;
+      }
+      span {
+        cursor: default;
+      }
+      i {
+        cursor: pointer;
+        transform: scale(1);
+        transition: all 0.3s ease-in-out;
+        &:hover {
+          transform: scale(1.2);
+          transition: all 0.3s ease-in-out;
+        }
+      }
     }
+  }
+}
+
+@mixin work-space($theme-type, $theme-color) {
+  .workspace {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+    background-color: $theme-color;
+    margin-bottom: 15px;
+    z-index: 1;
+    .el-tabs.el-tabs--top.el-tabs--border-card {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      z-index: 2;
+      .el-tabs__content {
+        padding: 0;
+        height: 0;
+        .el-tab-pane {
+          height: 0;
+        }
+      }
+    }
+  }
+}
+
+@mixin user-info($theme-type, $theme-color) {
+  .user-info{
+    width: 100%;
+    height: 500px;
+    background-color: $theme-color;
+    margin-bottom: 15px;
   }
 }
 

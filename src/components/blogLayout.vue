@@ -16,13 +16,26 @@
     </header-bar>
     <blog-title v-model:name="userInfo.user_name" />
     <blog-container>
-      <blog-container-main>
+      <blog-container-main
+        :class="
+          router.currentRoute.value.path.indexOf('/home/work-space') !== -1
+            ? 'work-main'
+            : ''
+        "
+      >
         <router-view v-slot="{ Component }">
           <component :is="Component" />
         </router-view>
         <blog-footer />
       </blog-container-main>
-      <aside-container ref="asideInfoRef">
+      <aside-container
+        ref="asideInfoRef"
+        :class="
+          router.currentRoute.value.path.indexOf('/home/work-space') !== -1
+            ? 'work-aside'
+            : ''
+        "
+      >
         <aside-title
           :name="userInfo.user_name"
           :profile="userInfo.user_profile"
@@ -41,7 +54,10 @@
         <el-icon><ArrowUpBold /></el-icon>
       </div>
     </el-backtop>
-    <el-button class="float-box plus-blog" @click="router.push({name:'editorBlog'})">
+    <el-button
+      class="float-box plus-blog"
+      @click="router.push({ name: 'editorBlog' })"
+    >
       <el-icon color="$primary">
         <svg width="30" height="30" viewBox="0 0 48 48">
           <path
@@ -142,7 +158,7 @@ import { useUserStore, useThemeStore } from "@/store";
 import { ColorPickerInstance } from "element-plus";
 import Theme from "@/util/theme";
 import { debounce } from "lodash";
-import { router } from '@/router'
+import { router } from "@/router";
 
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
@@ -294,6 +310,7 @@ watch(
   }
 }
 </style>
+
 <style lang="scss" scoped>
 @media screen and (min-width: 1451px) {
   ::v-deep(.el-backtop) {
@@ -350,5 +367,16 @@ watch(
   position: fixed;
   bottom: 100px;
   right: 50px;
+}
+
+.work-aside-enter-active,
+.work-aside-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.work-aside-enter-from,
+.work-aside-leave-to {
+  width: 0;
+  opacity: 0;
 }
 </style>
