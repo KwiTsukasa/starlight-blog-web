@@ -8,8 +8,8 @@
     </el-tabs>
     <router-view v-slot="{ Component }">
       <Transition
-        enter-active-class="animate__animated animate__fadeInRightBig"
-        leave-active-class="animate__animated animate__fadeOutLeftBig"
+        enter-active-class="animate__animated animate__fadeInDown"
+        leave-active-class="animate__animated animate__fadeOutUp"
         mode="out-in"
       >
         <component :is="Component" />

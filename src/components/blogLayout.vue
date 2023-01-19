@@ -127,6 +127,7 @@
           <el-color-picker
             ref="colorPicker"
             v-model="classSetting.themeColor"
+            :predefine="predefineColors"
             @active-change="changeThemeColor"
           />
         </div>
@@ -146,8 +147,18 @@
             <span class="dic">{{ userInfo.user_profile }}</span>
           </div>
         </div>
-        <div class="search-button"></div>
+        <div class="action-bar">
+          <div class="dialog-search">
+            <el-button>搜索文章</el-button>
+          </div>
+          <div class="dialog-plus">
+            <el-button>发布博客</el-button>
+          </div>
+        </div>
       </div>
+      <el-divider>
+        <el-icon><star-filled /></el-icon>
+      </el-divider>
     </el-drawer>
   </Layout>
 </template>
@@ -223,6 +234,15 @@ const theme = ref<ThemeColorInterface>({
     "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif`,
   "--el-color-primary": "#5e72e4",
 });
+const predefineColors = ref([
+  "#ff4500",
+  "#ff8c00",
+  "#ffd700",
+  "#90ee90",
+  "#00ced1",
+  "#1e90ff",
+  "#c71585",
+]);
 const elMixin = ref<ElMixinColor>({});
 
 const changeHeaderTheme = () => {
@@ -274,6 +294,7 @@ watch(
 );
 </script>
 <style lang="scss">
+
 .light {
   * {
     color: $dark;
@@ -326,7 +347,6 @@ watch(
 @media screen and (max-width: 1450px) {
   ::v-deep(.el-backtop) {
     left: 50px;
-    right: 0;
   }
   .theme-change {
     animation: float-left-visible 0.5s forwards;
@@ -337,7 +357,10 @@ watch(
 }
 @media screen and (max-width: 900px) {
   ::v-deep(.el-backtop) {
-    animation: float-hidden 0.5s forwards;
+    left: unset;
+    right: 50px;
+    opacity: 0.6;
+    transition: all 0.3 ease-in-out;
   }
   .theme-change {
     animation: float-hidden 0.5s forwards;

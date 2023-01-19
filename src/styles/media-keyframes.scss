@@ -28,11 +28,9 @@
   @keyframes float-hidden {
     0% {
       opacity: 1;
-      left: 50px;
     }
     100% {
-      opacity: 0;
-      left: -50px;
+      opacity: 0.6;
     }
   }
 }

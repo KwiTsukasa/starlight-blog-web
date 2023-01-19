@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { ElTabs,ElTabPane} from "element-plus";
+import { ElTabs, ElTabPane } from "element-plus";
 import userLogin from "./userLogin.vue";
 import userRegister from "./userRegister.vue";
 const activeName = ref<string>("user");
@@ -31,19 +31,19 @@ const activeName = ref<string>("user");
 </style>
 <style scoped lang="scss">
 .login {
+  overflow: hidden;
   &__box {
     width: 100%;
     margin: 0 auto;
     display: flex;
-    border-radius: 6px;
+    border-radius: $theme-card-radius;
     overflow: hidden;
     margin-bottom: 15px;
 
     &-left {
       position: relative;
       top: 0;
-      bottom: 9;
-      flex: 1;
+      width: 30rem;
       height: 500px;
       z-index: -1;
       filter: blur(0.8px);
@@ -53,17 +53,28 @@ const activeName = ref<string>("user");
       animation: form-left 1s forwards ease-in-out;
     }
 
+    @media screen and (max-width: 900px) {
+      &-left{
+        display: none;
+      }
+      &-right{
+        padding: 40px 0 20px;
+      }
+    }
+
     &-right {
       display: flex;
       align-items: center;
-      width: 560px;
+      flex: 1;
       background: #fff;
       box-shadow: 0 8px 52px 0 rgb(0 0 0 / 14%);
     }
   }
 
   &__card {
-    width: 406px;
+    box-sizing: border-box;
+    padding: 0 20px;
+    width: 100%;
     height: 428px;
     margin: 0 auto;
 

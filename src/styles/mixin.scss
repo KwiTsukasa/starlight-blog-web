@@ -79,7 +79,7 @@
     .center-container {
       display: flex;
       float: left;
-      width: 100%;
+      flex: 1;
       .el-button.is-link {
         margin: 0;
         padding: 0;
@@ -108,6 +108,12 @@
       }
       @media screen and (max-width: 900px) {
         justify-content: center;
+        .home-title,
+        .home-img {
+          .el-button.is-link {
+            margin: 0;
+          }
+        }
         .all-blog {
           display: none;
         }
@@ -217,7 +223,6 @@
     display: inline-block;
     animation: text-box var(--box) ease;
     animation-fill-mode: forwards;
-    overflow: hidden;
     white-space: nowrap;
     span {
       cursor: default;
@@ -225,10 +230,14 @@
       font-size: 3em;
       font-weight: bold;
       color: transparent;
-      overflow: hidden;
       animation: text var(--timer) ease;
       animation-delay: var(--deylay);
       animation-fill-mode: forwards;
+    }
+    @media screen and (max-width: 900px) {
+      span {
+        font-size: 2em;
+      }
     }
   }
 }
@@ -273,7 +282,7 @@
     &-title {
       width: 100%;
       height: 250px;
-      border-radius: 4px;
+      border-radius: $theme-border-radius;
       background-color: $theme-color;
       margin-bottom: 15px;
       overflow: hidden;
@@ -298,7 +307,7 @@
     &-info {
       width: 100%;
       height: 350px;
-      border-radius: 4px;
+      border-radius: $theme-border-radius;
       background-color: $theme-color;
       overflow: hidden;
     }
@@ -314,6 +323,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    overflow: hidden;
     &-list {
       max-width: 100%;
       height: 300px;
@@ -325,7 +335,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      max-width: 100%;
+      overflow: hidden;
       height: 100px;
       margin-bottom: 20px;
       color: $light;
@@ -334,10 +344,26 @@
       letter-spacing: 0.1em;
       background: $theme-label-bg;
     }
+
+    @media screen and (max-width: 900px) {
+      &-footer {
+        font-size: 0.8em;
+      }
+    }
   }
 }
 
 @mixin edit-blog($theme-type, $theme-color) {
+  --w-e-toolbar-border-color: transparent;
+  --w-e-textarea-border-color: transparent;
+  @if ($theme-type == "dark") {
+    --w-e-textarea-bg-color: #333;
+    --w-e-textarea-color: #fff;
+    --w-e-toolbar-color: #fff;
+    --w-e-toolbar-bg-color: #595959;
+    --w-e-toolbar-active-color: #f1f1f1;
+    --w-e-toolbar-active-bg-color: #333;
+  }
   .editor-blog {
     box-sizing: border-box;
     padding: 20px 20px;
@@ -351,6 +377,7 @@
       flex: 1;
       width: 100%;
       border: 1px solid #ccc;
+      border-radius: $theme-border-radius;
       overflow: hidden;
     }
     .go-back {
@@ -362,7 +389,6 @@
       line-height: 30px;
       color: $primary;
       font-size: 20px;
-      overflow: hidden;
       @if ($theme-type == "dark") {
         color: #fff;
       }
@@ -379,11 +405,52 @@
         }
       }
     }
+    .edit-title {
+      margin-bottom: 10px;
+    }
   }
 }
 
 @mixin work-space($theme-type, $theme-color) {
   .workspace {
+    --el-fill-color-blank: transparent;
+    --el-bg-color: transparent;
+    --el-fill-color: #f7f8fe;
+    --el-disabled-bg-color: var(--el-fill-color-light);
+    --el-bg-color-overlay: rgb(
+      calc(var(--R) + (255 - var(--R)) * 0.92),
+      calc(var(--G) + (255 - var(--G)) * 0.92),
+      calc(var(--B) + (255 - var(--B)) * 0.92)
+    );
+    --el-border-color-lighter: rgba(0, 0, 0, 0.1);
+    --el-border-color: rgba(0, 0, 0, 0.1);
+    --el-border-color-light: rgba(0, 0, 0, 0.1);
+    @if ($theme-type == "dark") {
+      --el-fill-color: rgb(
+        calc(30 * 0.9 + var(--R) * (1 - 0.8)),
+        calc(30 * 0.9 + var(--G) * (1 - 0.8)),
+        calc(30 * 0.9 + var(--B) * (1 - 0.8))
+      );
+      --el-bg-color-overlay: rgb(
+        calc(30 * 0.9 + var(--R) * (1 - 0.9)),
+        calc(30 * 0.9 + var(--G) * (1 - 0.9)),
+        calc(30 * 0.9 + var(--B) * (1 - 0.9))
+      );
+      --el-fill-color-light: rgb(
+        calc(30 * 0.9 + var(--R) * (1 - 0.8)),
+        calc(30 * 0.9 + var(--G) * (1 - 0.8)),
+        calc(30 * 0.9 + var(--B) * (1 - 0.8))
+      );
+      --el-disabled-bg-color: var(--el-fill-color-light);
+      --el-border-color-lighter: rgba(255, 255, 255, 0.5);
+      --el-border-color: rgba(255, 255, 255, 0.5);
+      --el-border-color-light: rgba(255, 255, 255, 0.5);
+      .el-pager li,
+      .btn-next,
+      .btn-prev {
+        color: #fff !important;
+      }
+    }
     position: relative;
     width: 100%;
     height: 600px;
@@ -397,10 +464,10 @@
       right: 0;
       left: 0;
       bottom: 0;
-      height: 100%;
+      height: 40px;
       display: flex;
       flex-direction: column;
-      z-index: 2;
+      z-index: 4;
       .el-tabs__content {
         padding: 0;
         height: 0;
@@ -413,7 +480,7 @@
 }
 
 @mixin user-info($theme-type, $theme-color) {
-  .user-info{
+  .user-info {
     width: 100%;
     height: 500px;
     background-color: $theme-color;
@@ -423,13 +490,14 @@
 
 @mixin float-box($theme-type, $theme-color, $theme-label-bg, $theme-float) {
   .backtop {
+    opacity: 1;
     height: 40px;
     width: 100%;
     border: 0.0625rem solid rgba(0, 0, 0, 0.05);
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     text-align: center;
     color: $light;
-    border-radius: 4px;
+    border-radius: $theme-border-radius;
     background-color: $theme-label-bg !important;
     transition: all 0.3s ease;
     @if ($theme-type == "light") {
@@ -449,7 +517,7 @@
     margin: 0 !important;
     height: 40px !important;
     width: 40px;
-    border-radius: 4px;
+    border-radius: $theme-border-radius;
     z-index: 1000;
     border: 0.0625rem solid rgba(0, 0, 0, 0.05) !important;
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
@@ -504,6 +572,25 @@
           @include label-text;
         }
       }
+      .action-bar {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        .dialog-search {
+          margin-bottom: 15px;
+        }
+      }
+    }
+    .el-divider {
+      .el-divider__text {
+        color: $light;
+        background: $theme-color !important;
+        @if ($theme-type == "light") {
+          color: $theme-float;
+        }
+      }
     }
   }
 }
@@ -520,5 +607,11 @@
   .dic {
     margin-top: 5px;
     opacity: 0.8;
+  }
+
+  @media screen and (max-width: 900px) {
+    .title {
+      font-size: 1.2em;
+    }
   }
 }

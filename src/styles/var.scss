@@ -11,6 +11,7 @@ $L: var(--L);
 $primary: rgb($R, $G, $B);
 $primary-border: 1px $primary solid;
 $theme-border-radius: 4px;
+$theme-card-radius: 6px;
 $input-radius: var(--el-input-border-radius, var(--el-border-radius-base));
 $input-color: var(--el-input-bg-color, var(--el-fill-color-blank));
 $input-icon-color: #adb5bd;
@@ -49,16 +50,11 @@ $dark-float: hsl($H, calc($S * 1%), max(calc($L * 1% - 10%), 0%));
 $theme-font: var(--theme-font);
 
 .variable {
-  --el-bg-color-overlay: rgb(
-    calc(var(--R) + (255 - var(--R)) * 0.92),
-    calc(var(--G) + (255 - var(--G)) * 0.92),
-    calc(var(--B) + (255 - var(--B)) * 0.92)
-  );
-  --el-popover-bg-color: var(--el-bg-color-overlay);
   --el-color-black: rgb(
     calc(25.8 + var(--R) * 0.14),
     calc(25.8 + var(--G) * 0.14),
     calc(25.8 + var(--B) * 0.14)
   );
   --el-text-color-primary: var(--el-color-black);
+  --el-popover-bg-color: var(--el-bg-color-overlay);
 }

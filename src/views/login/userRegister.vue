@@ -46,7 +46,7 @@
         class="login-submit"
         @click="submitForm(registerFormRef)"
       >
-        登录
+        注册并登录
       </el-button>
     </el-form-item>
   </el-form>
@@ -98,7 +98,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         if (res) {
           getLogin(registerForm.value).then((res) => {
             ElMessage({
-              message: res?.msg,
+              message: res.message,
               type: "success",
             });
             userStore.setUserInfo(res.data);
@@ -120,8 +120,10 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   }
   ::v-deep(.el-input) {
     height: 37px;
+    overflow: hidden;
     .el-input-group__append {
       padding: 0;
+      padding-right: 1.5px;
     }
   }
 }

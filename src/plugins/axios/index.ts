@@ -9,8 +9,8 @@ import { ElMessage } from "element-plus";
 // 数据返回的接口
 // 定义请求响应参数，不含data
 interface Result {
-  code: number;
-  msg: string;
+  statusCode: number;
+  message: string;
 }
 
 // 请求响应参数，包含data
@@ -20,8 +20,8 @@ interface ResultData<T = any> extends Result {
 const URL: string = "";
 enum RequestEnums {
   TIMEOUT = 20000,
-  OVERDUE = 600, // 登录失效
-  FAIL = 999, // 请求失败
+  OVERDUE = 401, // 登录失效
+  FAIL = 400, // 请求失败
   SUCCESS = 200, // 请求成功
 }
 const config = {
@@ -36,7 +36,7 @@ const config = {
 class RequestHttp {
   // 定义成员变量并指定类型
   service: AxiosInstance;
-  public constructor(config: AxiosRequestConfig) {
+  public constructor(config: AxiosRequestConfig,) {
     // 实例化axios
     this.service = axios.create(config);
     /**
@@ -62,7 +62,7 @@ class RequestHttp {
       (error: AxiosError) => {
         // 请求报错
         NProgress.done();
-        Promise.reject(error);
+        return Promise.reject(error);
       }
     );
     /**
@@ -73,15 +73,15 @@ class RequestHttp {
     this.service.interceptors.response.use(
       (response: AxiosResponse) => {
         const { data, config } = response; // 解构
-        if (data.code === RequestEnums.OVERDUE) {
+        if (data.statusCode === RequestEnums.OVERDUE) {
           NProgress.done();
           // 登录信息失效，应跳转到登录页面，并清空本地的token
           localStorage.setItem("token", ""); // router.replace({ //   path: '/login' // })
           return Promise.reject(data);
         } // 全局错误信息拦截（防止下载文件得时候返回数据流，没有code，直接报错）
-        if (data.code && data.code !== RequestEnums.SUCCESS) {
+        if (data.statusCode && data.statusCode !== RequestEnums.SUCCESS) {
           NProgress.done();
-          ElMessage.error(data); // 此处也可以使用组件提示报错信息
+          ElMessage.error(data.message); // 此处也可以使用组件提示报错信息
           return Promise.reject(data);
         }
         return data;
@@ -91,10 +91,12 @@ class RequestHttp {
         if (response) {
           NProgress.done();
           this.handleCode(response.data);
+          return Promise.reject(response.data);
         }
         if (!window.navigator.onLine) {
           NProgress.done();
           ElMessage.error("网络连接失败"); // 可以跳转到错误页面，也可以不做操作 // return router.replace({ //   path: '/404' // });
+          return Promise.reject(response.data);
         }
       }
     );
@@ -107,7 +109,7 @@ class RequestHttp {
         break;
       default:
         NProgress.done();
-        ElMessage.error("请求失败");
+        ElMessage.error(err.message);
         break;
     }
   }

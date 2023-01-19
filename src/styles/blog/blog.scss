@@ -7,7 +7,7 @@
 }
 
 .card {
-  border-radius: 6px;
+  border-radius: $theme-card-radius;
   box-shadow: $card-shadow;
   animation: card-show 0.25s ease-out;
   transform-origin: center top;

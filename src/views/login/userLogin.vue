@@ -28,7 +28,7 @@
         class="login-submit"
         @click="submitForm(loginFormRef)"
       >
-        登录
+        登&nbsp;录
       </el-button>
     </el-form-item>
   </el-form>
@@ -57,7 +57,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     if (valid) {
       getLogin(loginForm.value).then((res) => {
         ElMessage({
-          message: res?.msg,
+          message: res.message,
           type: "success",
         });
         userStore.setUserInfo(res.data);
@@ -80,6 +80,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     height: 37px;
     .el-input-group__append {
       padding: 0;
+      padding-right: 1.5px;
     }
   }
 }

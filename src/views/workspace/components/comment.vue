@@ -29,8 +29,8 @@ type TableOption = {
 
 const tableOption = ref<Array<TableOption>>([
   {
-    label: "分组名称",
-    prop: "group_name",
+    label: "评论内容",
+    prop: "comment_content",
     poisition: "center",
   },
   {
@@ -44,7 +44,7 @@ const tableOption = ref<Array<TableOption>>([
     poisition: "center",
   },
   {
-    label: "归属文章数",
+    label: "归属文章",
     prop: "article_count",
     poisition: "center",
   },

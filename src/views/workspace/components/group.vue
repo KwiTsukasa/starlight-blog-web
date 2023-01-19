@@ -44,7 +44,7 @@ const tableOption = ref<Array<TableOption>>([
     poisition: "center",
   },
   {
-    label: "归属文章数",
+    label: "文章数",
     prop: "article_count",
     poisition: "center",
   },
