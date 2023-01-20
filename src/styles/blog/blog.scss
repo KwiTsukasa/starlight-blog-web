@@ -1,8 +1,18 @@
 .light-container {
+  --el-border-color-lighter: rgba(0, 0, 0, 0.1);
+  --el-border-color: rgba(0, 0, 0, 0.1);
+  --el-border-color-light: rgba(0, 0, 0, 0.1);
+  --el-bg-color-overlay: var(--light-input-bg);
+  --el-bg-color: var(--light-input-bg);
   @include theme-style("light", $light, $light-linear, $primary);
 }
 
 .dark-container {
+  --el-border-color-lighter: rgba(255, 255, 255, 0.1);
+  --el-border-color: rgba(255, 255, 255, 0.1);
+  --el-border-color-light: rgba(255, 255, 255, 0.1);
+  --el-bg-color-overlay: var(--dark-deep-bg);
+  --el-bg-color: var(--dark-deep-bg);
   @include theme-style("dark", $dark, $dark-linear, $dark-float);
 }
 
@@ -19,31 +29,4 @@
 
 .work-aside {
   animation: aside-hidden 0.5s forwards !important;
-}
-
-.work-crud {
-  position: relative;
-  top: 40px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: calc(100% - 40px);
-  z-index: 3;
-}
-
-.pagination {
-  box-sizing: border-box;
-  padding: 0 20px;
-  position: relative;
-  top: -54px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
-  height: 54px;
-  z-index: 4;
 }

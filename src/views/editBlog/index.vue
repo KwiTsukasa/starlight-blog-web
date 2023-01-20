@@ -27,14 +27,27 @@
         @onCreated="handleCreated"
       />
     </div>
-    <div class="edit-tags">
-      <el-tag
-        v-for="tag in blogForm.tags"
-        :key="tag"
-        closable
-        :disable-transitions="false"
-        @close="handleClose(tag)"
-      ></el-tag>
+    <div class="edit-grouptags">
+      <div class="edit-group">
+        <el-select v-model="blogForm.group" placeholder="请选择分组" :teleported="false">
+          <el-option
+            v-for="item in groups"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </div>
+      <div class="edit-tags">
+        <el-select v-model="blogForm.tags" multiple placeholder="请选择标签" :teleported="false">
+          <el-option
+            v-for="item in tags"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </div>
     </div>
   </div>
 </template>
@@ -42,16 +55,38 @@
 <script setup lang="ts">
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import { IToolbarConfig, Boot } from "@wangeditor/editor";
-import markdownModule from '@wangeditor/plugin-md'
+import markdownModule from "@wangeditor/plugin-md";
 import { router } from "@/router";
 
 Boot.registerModule(markdownModule);
 
 const editorRef = shallowRef();
 // 内容 HTML
+
+const groups = ref([
+  {
+    label: "测试分组",
+    value: 1,
+  },
+  {
+    label: "Java",
+    value: 2,
+  },
+]);
+const tags = ref([
+  {
+    label: "测试标签",
+    value: 1,
+  },
+  {
+    label: "Golang",
+    value: 2,
+  },
+]);
 const blogForm = ref({
   title: "",
   content: "",
+  group: null,
   tags: [],
 });
 
@@ -61,7 +96,7 @@ onMounted(() => {
 });
 
 const toolbarConfig: Partial<IToolbarConfig> = {
-  excludeKeys: ["fullScreen","uploadVideo"],
+  excludeKeys: ["fullScreen", "uploadVideo"],
 };
 const editorConfig = { placeholder: "请输入内容..." };
 
@@ -78,21 +113,10 @@ const handleClose = (tag: string) => {
 
 const handleCreated = (editor) => {
   editorRef.value = editor; // 记录 editor 实例，重要！
-  console.log(editorRef.value.getConfig())
+  console.log(editorRef.value.getConfig());
 };
 
 const goBack = () => {
   router.go(-1);
 };
 </script>
-
-<style lang="scss" scoped>
-.edit {
-  display: flex;
-  flex-direction: column;
-  .content {
-    flex: 1;
-    overflow-y: hidden;
-  }
-}
-</style>

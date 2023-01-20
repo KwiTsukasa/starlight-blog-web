@@ -4,6 +4,7 @@
     ref="registerFormRef"
     :model="registerForm"
     :rules="registerRules"
+    @keyup.enter="submitForm(registerFormRef)"
   >
     <el-form-item prop="username">
       <el-input
@@ -115,9 +116,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
 <style scoped lang="scss">
 .register-form {
-  ::v-deep(.el-icon) {
-    color: #333;
-  }
   ::v-deep(.el-input) {
     height: 37px;
     overflow: hidden;

@@ -13,7 +13,7 @@ $primary-border: 1px $primary solid;
 $theme-border-radius: 4px;
 $theme-card-radius: 6px;
 $input-radius: var(--el-input-border-radius, var(--el-border-radius-base));
-$input-color: var(--el-input-bg-color, var(--el-fill-color-blank));
+$input-color: var(--el-bg-color);
 $input-icon-color: #adb5bd;
 $card-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 
@@ -50,11 +50,20 @@ $dark-float: hsl($H, calc($S * 1%), max(calc($L * 1% - 10%), 0%));
 $theme-font: var(--theme-font);
 
 .variable {
-  --el-color-black: rgb(
-    calc(25.8 + var(--R) * 0.14),
-    calc(25.8 + var(--G) * 0.14),
-    calc(25.8 + var(--B) * 0.14)
+  --light-input-bg: rgb(
+    calc(var(--R) + (255 - var(--R)) * 0.92),
+    calc(var(--G) + (255 - var(--G)) * 0.92),
+    calc(var(--B) + (255 - var(--B)) * 0.92)
   );
-  --el-text-color-primary: var(--el-color-black);
-  --el-popover-bg-color: var(--el-bg-color-overlay);
+  --dark-input-bg: rgb(
+    calc(30 * 0.9 + var(--R) * (1 - 0.85)),
+    calc(30 * 0.9 + var(--G) * (1 - 0.85)),
+    calc(30 * 0.9 + var(--B) * (1 - 0.85))
+  );
+  --dark-deep-bg: rgb(
+    calc(30 * 0.9 + var(--R) * (1 - 0.9)),
+    calc(30 * 0.9 + var(--G) * (1 - 0.9)),
+    calc(30 * 0.9 + var(--B) * (1 - 0.9))
+  );
+  --el-bg-color: var(--el-bg-color-overlay);
 }

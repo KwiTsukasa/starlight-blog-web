@@ -12,6 +12,7 @@
       <top-seacrch-input
         v-model:value="topSearch"
         v-model:visible="topSearchActive"
+        @keyup.enter="searchBlog"
       />
     </header-bar>
     <blog-title v-model:name="userInfo.user_name" />
@@ -73,7 +74,6 @@
       :visible="settingVisible"
       width="fit-content"
       :teleported="false"
-      :effect="classSetting.themeModel === 'light-container' ? 'light' : 'dark'"
     >
       <template #reference>
         <el-button
@@ -103,7 +103,7 @@
             :active-icon="Moon"
             :inactive-icon="Sunny"
             :style="{
-              '--el-switch-on-color': '#000',
+              '--el-switch-on-color': 'var(--dark-input-bg)',
               '--el-switch-off-color': 'var(--el-color-primary)',
             }"
             @change="changeHeaderTheme"
@@ -115,7 +115,9 @@
             v-model="classSetting.font"
             @change="changeFont"
             :class="
-              classSetting.themeModel === 'light-container' ? 'light' : 'dark'
+              classSetting.themeModel === 'light-container'
+                ? 'light-p'
+                : 'dark-p'
             "
           >
             <el-radio-button label="Comfortaa" />
@@ -218,6 +220,9 @@ const topSearchActive = ref<boolean>(false);
 const drawerVisible = ref<boolean>(false);
 const leftSearch = ref<string>("");
 const leftSearchActive = ref<boolean>(false);
+const searchBlog = () => {
+  console.log(topSearch.value);
+};
 
 const settingVisible = ref<boolean>(false);
 const colorPicker = ref<ColorPickerInstance>();
@@ -246,6 +251,12 @@ const predefineColors = ref([
 const elMixin = ref<ElMixinColor>({});
 
 const changeHeaderTheme = () => {
+  if (classSetting.value.themeModel === "dark-container") {
+    import("element-plus/theme-chalk/dark/css-vars.css");
+    document.querySelector("html").setAttribute("class", "theme dark");
+  } else {
+    document.querySelector("html").setAttribute("class", "theme");
+  }
   if (headerBarRef.value) {
     let headerStyle = headerBarRef.value.$el.style;
     headerStyle.backgroundColor = backgroundColor(oldScrollTop.value);
@@ -294,11 +305,7 @@ watch(
 );
 </script>
 <style lang="scss">
-
-.light {
-  * {
-    color: $dark;
-  }
+.light-p {
   border-radius: $theme-border-radius;
   overflow: hidden;
   border: $primary-border;
@@ -313,10 +320,7 @@ watch(
   }
 }
 
-.dark {
-  * {
-    color: $light;
-  }
+.dark-p {
   border-radius: $theme-border-radius;
   overflow: hidden;
   border: $primary-border;
@@ -359,8 +363,6 @@ watch(
   ::v-deep(.el-backtop) {
     left: unset;
     right: 50px;
-    opacity: 0.6;
-    transition: all 0.3 ease-in-out;
   }
   .theme-change {
     animation: float-hidden 0.5s forwards;

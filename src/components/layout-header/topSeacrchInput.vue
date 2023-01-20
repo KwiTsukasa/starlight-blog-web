@@ -1,22 +1,16 @@
 <template>
-  <div
-    class="header-search"
-    :class="visible ? 'top-search-is-active' : ''"
-  >
+  <div class="header-search" :class="visible ? 'top-search-is-active' : ''">
     <el-input
       class="search-input"
-      v-model="value"
+      v-model="inputValue"
       placeholder="搜索什么..."
       size="large"
       @blur="emits('update:visible', false)"
-      @input="emits('update:value')"
+      @input="emits('update:value', inputValue)"
     >
       <template #prefix>
-        <i class="el-icon" @click="emits('update:visible', true);">
-          <svg
-            viewBox="0 0 48 48"
-            fill="#fff"
-          >
+        <i class="el-icon" @click="emits('update:visible', true)">
+          <svg viewBox="0 0 48 48" fill="#fff">
             <path
               fill-rule="evenodd"
               clip-rule="evenodd"
@@ -45,6 +39,8 @@ type Props = {
   visible: boolean;
   value: string;
 };
+
+const inputValue = ref<string>("");
 const props = defineProps<Props>();
 const { value, visible } = toRefs(props);
 

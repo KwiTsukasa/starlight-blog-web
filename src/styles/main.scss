@@ -44,6 +44,36 @@ div {
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 }
 
+.el-tabs__nav-wrap::after {
+  background-color: transparent !important;
+}
+
+.el-button {
+  font-size: 12px !important;
+}
+
+.el-button--small {
+  padding: 9px 15px !important;
+  border-radius: 3px !important;
+  height: 32px !important;
+}
+
+.el-pager li,
+.is-active.number,
+.btn-next,
+.btn-prev {
+  border: 1px solid var(--el-border-color) !important;
+  background-color: transparent !important;
+}
+.el-pager li:hover {
+  border: 1px solid $primary !important;
+  color: $primary !important;
+}
+.is-active.number {
+  border: 1px solid $primary !important;
+  color: $primary !important;
+}
+
 ::-webkit-scrollbar {
   width: 7px;
   height: 8px;

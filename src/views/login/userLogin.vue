@@ -4,6 +4,7 @@
     ref="loginFormRef"
     :model="loginForm"
     :rules="loginRules"
+    @keyup.enter="submitForm(loginFormRef)"
   >
     <el-form-item prop="username">
       <el-input
@@ -73,9 +74,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 <style scoped lang="scss">
 .login-form {
   height: 285px;
-  ::v-deep(.el-icon) {
-    color: #333;
-  }
   ::v-deep(.el-input) {
     height: 37px;
     .el-input-group__append {
