@@ -29,7 +29,11 @@
     </div>
     <div class="edit-grouptags">
       <div class="edit-group">
-        <el-select v-model="blogForm.group" placeholder="请选择分组" :teleported="false">
+        <el-select
+          v-model="blogForm.group"
+          placeholder="请选择分组"
+          :teleported="false"
+        >
           <el-option
             v-for="item in groups"
             :key="item.value"
@@ -39,7 +43,12 @@
         </el-select>
       </div>
       <div class="edit-tags">
-        <el-select v-model="blogForm.tags" multiple placeholder="请选择标签" :teleported="false">
+        <el-select
+          v-model="blogForm.tags"
+          multiple
+          placeholder="请选择标签"
+          :teleported="false"
+        >
           <el-option
             v-for="item in tags"
             :key="item.value"
@@ -57,6 +66,13 @@ import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import { IToolbarConfig, Boot } from "@wangeditor/editor";
 import markdownModule from "@wangeditor/plugin-md";
 import { router } from "@/router";
+import { getGroupKv } from "@/apis/group";
+import { getTagKv } from "@/apis/tag";
+
+const onLoad = () => {
+  groupKv();
+  tagKv();
+};
 
 Boot.registerModule(markdownModule);
 
@@ -90,10 +106,17 @@ const blogForm = ref({
   tags: [],
 });
 
-// 模拟 ajax 异步获取内容
-onMounted(() => {
-  console.log();
-});
+const groupKv = () => {
+  getGroupKv().then((res) => {
+    groups.value = res.data;
+  });
+};
+
+const tagKv = () => {
+  getTagKv().then((res) => {
+    tags.value = res.data;
+  });
+};
 
 const toolbarConfig: Partial<IToolbarConfig> = {
   excludeKeys: ["fullScreen", "uploadVideo"],
@@ -107,16 +130,13 @@ onBeforeUnmount(() => {
   editor.destroy();
 });
 
-const handleClose = (tag: string) => {
-  blogForm.value.tags.splice(blogForm.value.tags.indexOf(tag), 1);
-};
-
 const handleCreated = (editor) => {
   editorRef.value = editor; // 记录 editor 实例，重要！
-  console.log(editorRef.value.getConfig());
 };
 
 const goBack = () => {
   router.go(-1);
 };
+
+onLoad();
 </script>

@@ -54,44 +54,44 @@ const routes: Array<RouteRecordRaw> = [
     path: "/home/work-space",
     name: "workSpace",
     component: () => import("@/views/workspace/index.vue"),
-    redirect:"/home/work-space/group",
+    redirect: "/home/work-space/group",
     meta: {
       title: "工作台",
     },
-    children:[
+    children: [
       {
-        path:"/home/work-space/group",
-        name:"group",
-        component:() => import("@/views/workspace/components/group.vue"),
-        meta:{
-          title:"crud-分组"
-        }
+        path: "/home/work-space/group",
+        name: "group",
+        component: () => import("@/views/workspace/components/group.vue"),
+        meta: {
+          title: "crud-分组",
+        },
       },
       {
-        path:"/home/work-space/blog",
-        name:"blog",
-        component:() => import("@/views/workspace/components/blog.vue"),
-        meta:{
-          title:"crud-博客"
-        }
+        path: "/home/work-space/blog",
+        name: "blog",
+        component: () => import("@/views/workspace/components/blog.vue"),
+        meta: {
+          title: "crud-博客",
+        },
       },
       {
-        path:"/home/work-space/tag",
-        name:"tag",
-        component:() => import("@/views/workspace/components/tag.vue"),
-        meta:{
-          title:"crud-标签"
-        }
+        path: "/home/work-space/tag",
+        name: "tag",
+        component: () => import("@/views/workspace/components/tag.vue"),
+        meta: {
+          title: "crud-标签",
+        },
       },
       {
-        path:"/home/work-space/comment",
-        name:"comment",
-        component:() => import("@/views/workspace/components/comment.vue"),
-        meta:{
-          title:"crud-评论"
-        }
-      }
-    ]
+        path: "/home/work-space/comment",
+        name: "comment",
+        component: () => import("@/views/workspace/components/comment.vue"),
+        meta: {
+          title: "crud-评论",
+        },
+      },
+    ],
   },
 ];
 
@@ -113,6 +113,9 @@ export const setupRouter = (app: App) => {
     ) {
       ElMessage.warning("请先登录或注册账号");
       router.replace("/home/login");
+    } else if (to.path !== "/home/login") {
+      userStore.setRefreshTokenTime();
+      next();
     } else {
       next();
     }
