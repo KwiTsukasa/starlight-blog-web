@@ -6,6 +6,7 @@ import axios, {
 } from "axios";
 import NProgress from "nprogress";
 import { ElMessage } from "element-plus";
+import { router } from "@/router";
 // 数据返回的接口
 // 定义请求响应参数，不含data
 interface Result {
@@ -36,7 +37,7 @@ const config = {
 class RequestHttp {
   // 定义成员变量并指定类型
   service: AxiosInstance;
-  public constructor(config: AxiosRequestConfig,) {
+  public constructor(config: AxiosRequestConfig) {
     // 实例化axios
     this.service = axios.create(config);
     /**
@@ -51,11 +52,12 @@ class RequestHttp {
         const token =
           JSON.parse(window.localStorage.getItem("userInfo")) === null
             ? null
-            : JSON.parse(window.localStorage.getItem("userInfo")).userInfo.access_token;
+            : JSON.parse(window.localStorage.getItem("userInfo")).userInfo
+                .access_token;
         return {
           ...config,
           headers: {
-            "Authorization": 'Bearer ' + token, // 请求头中携带token信息
+            Authorization: "Bearer " + token, // 请求头中携带token信息
           },
         };
       },
@@ -106,6 +108,7 @@ class RequestHttp {
       case 401:
         NProgress.done();
         ElMessage.error(err.message);
+        router.push({ name: "login" });
         break;
       default:
         NProgress.done();

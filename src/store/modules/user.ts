@@ -41,7 +41,7 @@ export const useUserStore = defineStore("userInfo", {
     setRefreshTokenTime() {
       clearInterval(this.timer);
       this.timer = setInterval(() => {
-        if (this.userInfo.expires_time > 600) {
+        if (this.userInfo.expires_time > 2600) {
           console.log(this.userInfo.expires_time);
           this.userInfo.expires_time -= 1;
         } else {

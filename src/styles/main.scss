@@ -58,6 +58,10 @@ div {
   height: 32px !important;
 }
 
+.el-select__tags{
+  max-width: unset !important;
+}
+
 .el-pager li,
 .is-active.number,
 .btn-next,

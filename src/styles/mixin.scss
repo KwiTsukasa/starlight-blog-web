@@ -514,6 +514,12 @@
       .edit-group {
         margin-right: 10px;
       }
+      .edit-tags {
+        flex: 1;
+        .el-select{
+          width: 100%;
+        }
+      }
     }
   }
 }

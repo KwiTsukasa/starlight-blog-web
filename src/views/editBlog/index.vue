@@ -33,6 +33,7 @@
           v-model="blogForm.group"
           placeholder="请选择分组"
           :teleported="false"
+          clearable
         >
           <el-option
             v-for="item in groups"
@@ -48,6 +49,7 @@
           multiple
           placeholder="请选择标签"
           :teleported="false"
+          clearable
         >
           <el-option
             v-for="item in tags"

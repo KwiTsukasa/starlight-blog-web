@@ -1,5 +1,5 @@
 import axios from "@/plugins/axios";
 
 export const refreshToken: any = (params) => {
-  return axios.get<any>("/api/auth/refreshToken", params);
+  return axios.post<any>("/api/auth/refreshToken", params);
 };
