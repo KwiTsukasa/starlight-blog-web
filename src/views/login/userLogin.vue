@@ -61,7 +61,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           message: res.message,
           type: "success",
         });
-        userStore.setUserInfo(res.data);
+        userStore.setUserInfo(res.data.data);
         router.push("/home/all-blog");
       });
     } else {

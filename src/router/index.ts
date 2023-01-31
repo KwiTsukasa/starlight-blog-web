@@ -114,7 +114,6 @@ export const setupRouter = (app: App) => {
       ElMessage.warning("请先登录或注册账号");
       router.replace("/home/login");
     } else if (to.path !== "/home/login") {
-      userStore.setRefreshTokenTime();
       next();
     } else {
       next();

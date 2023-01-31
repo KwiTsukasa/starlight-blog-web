@@ -20,7 +20,7 @@ interface ResultData<T = any> extends Result {
 }
 const URL: string = "";
 enum RequestEnums {
-  TIMEOUT = 20000,
+  TIMEOUT = 10000,
   OVERDUE = 401, // 登录失效
   FAIL = 400, // 请求失败
   SUCCESS = 200, // 请求成功
@@ -33,6 +33,9 @@ const config = {
   // 跨域时候允许携带凭证
   withCredentials: true,
 };
+
+let isRefresh = false;
+let promiseArr = [];
 
 class RequestHttp {
   // 定义成员变量并指定类型
@@ -77,9 +80,6 @@ class RequestHttp {
         const { data, config } = response; // 解构
         if (data.statusCode === RequestEnums.OVERDUE) {
           NProgress.done();
-          // 登录信息失效，应跳转到登录页面，并清空本地的token
-          localStorage.setItem("token", ""); // router.replace({ //   path: '/login' // })
-          return Promise.reject(data);
         } // 全局错误信息拦截（防止下载文件得时候返回数据流，没有code，直接报错）
         if (data.statusCode && data.statusCode !== RequestEnums.SUCCESS) {
           NProgress.done();
@@ -88,27 +88,39 @@ class RequestHttp {
         }
         return data;
       },
-      (error: AxiosError) => {
-        const { response } = error;
-        if (response) {
-          NProgress.done();
-          this.handleCode(response.data);
-          return Promise.reject(response.data);
-        }
-        if (!window.navigator.onLine) {
-          NProgress.done();
-          ElMessage.error("网络连接失败"); // 可以跳转到错误页面，也可以不做操作 // return router.replace({ //   path: '/404' // });
-          return Promise.reject(response.data);
+      async (error: AxiosError) => {
+        this.handleCode(error.response.data);
+        if (error.response && error.response.status === 401) {
+          if (!isRefresh) {
+            isRefresh = true;
+            try {
+              await this._refreshToken();
+              isRefresh = false;
+              while (promiseArr.length > 0) {
+                const cb = promiseArr.shift();
+                cb();
+              }
+            } catch (err) {
+              return Promise.reject(err);
+            }
+          }
+          return new Promise((resolve) => {
+            error.config.headers["Authorization"] =
+              "Bearer " +
+              JSON.parse(window.localStorage.getItem("userInfo")).userInfo
+                .refresh_token;
+            promiseArr.push(() => resolve(axios.request(error.response.config)));
+          });
+        } else {
+          return Promise.reject(error);
         }
       }
     );
   }
-  handleCode(err): void {
+  handleCode(err) {
     switch (err.statusCode) {
       case 401:
         NProgress.done();
-        ElMessage.error(err.message);
-        router.push({ name: "login" });
         break;
       default:
         NProgress.done();
@@ -116,7 +128,35 @@ class RequestHttp {
         break;
     }
   }
-
+  async _refreshToken() {
+    const user = JSON.parse(window.localStorage.getItem("userInfo"));
+    return new Promise<void>((resolve, reject) => {
+      axios
+        .request({
+          url: "/api/auth/refreshToken",
+          method: "POST",
+          data: {
+            user_name: user.userInfo.user_name,
+            user_id: user.userInfo.user_id,
+          },
+        })
+        .then((res) => {
+          if (user) {
+            const refresh = res.data.data;
+            user.userInfo.access_token = refresh.data.access_token;
+            user.userInfo.refresh_token = refresh.data.refresh_token;
+            window.localStorage.setItem("userInfo", JSON.stringify(user));
+            resolve();
+          } else {
+            return new Error("get token is null");
+          }
+        })
+        .catch((err) => {
+          router.push({ name: "login" });
+          reject(err);
+        });
+    });
+  }
   // 常用方法封装
   get<T>(url: string, params?: object): Promise<ResultData<T>> {
     NProgress.start();

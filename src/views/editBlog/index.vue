@@ -110,13 +110,15 @@ const blogForm = ref({
 
 const groupKv = () => {
   getGroupKv().then((res) => {
-    groups.value = res.data;
+    console.log(res);
+    groups.value = res.data.data;
   });
 };
 
 const tagKv = () => {
   getTagKv().then((res) => {
-    tags.value = res.data;
+    console.log(res);
+    tags.value = res.data.data;
   });
 };
 
