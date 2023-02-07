@@ -36,8 +36,8 @@
           clearable
         >
           <el-option
-            v-for="item in groups"
-            :key="item.value"
+            v-for="(item, key) in groups"
+            :key="key"
             :label="item.label"
             :value="item.value"
           />
@@ -52,8 +52,8 @@
           clearable
         >
           <el-option
-            v-for="item in tags"
-            :key="item.value"
+            v-for="(item, key) in tags"
+            :key="key"
             :label="item.label"
             :value="item.value"
           />
@@ -81,26 +81,8 @@ Boot.registerModule(markdownModule);
 const editorRef = shallowRef();
 // 内容 HTML
 
-const groups = ref([
-  {
-    label: "测试分组",
-    value: 1,
-  },
-  {
-    label: "Java",
-    value: 2,
-  },
-]);
-const tags = ref([
-  {
-    label: "测试标签",
-    value: 1,
-  },
-  {
-    label: "Golang",
-    value: 2,
-  },
-]);
+const groups = ref<Kv<string>[]>([]);
+const tags = ref<Kv<string>[]>([]);
 const blogForm = ref({
   title: "",
   content: "",
@@ -108,18 +90,14 @@ const blogForm = ref({
   tags: [],
 });
 
-const groupKv = () => {
-  getGroupKv().then((res) => {
-    console.log(res);
-    groups.value = res.data.data;
-  });
+const groupKv = async () => {
+  const { data } = await getGroupKv();
+  groups.value = data;
 };
 
-const tagKv = () => {
-  getTagKv().then((res) => {
-    console.log(res);
-    tags.value = res.data.data;
-  });
+const tagKv = async () => {
+  const { data } = await getTagKv();
+  tags.value = data;
 };
 
 const toolbarConfig: Partial<IToolbarConfig> = {
@@ -142,5 +120,7 @@ const goBack = () => {
   router.go(-1);
 };
 
-onLoad();
+onMounted(() => {
+  onLoad();
+});
 </script>

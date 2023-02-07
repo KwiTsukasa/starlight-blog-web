@@ -102,7 +102,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
               message: res.message,
               type: "success",
             });
-            userStore.setUserInfo(res.data.data);
+            res.data.expires_time =
+              new Date().getTime() / 1000 + res.data.expires_time;
+            userStore.setUserInfo(res.data);
             router.push("/home/all-blog");
           });
         }

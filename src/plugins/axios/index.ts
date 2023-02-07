@@ -25,7 +25,7 @@ enum RequestEnums {
   FAIL = 400, // 请求失败
   SUCCESS = 200, // 请求成功
 }
-const config = {
+const allConfig = {
   // 默认地址
   baseURL: URL as string,
   // 设置超时时间
@@ -50,8 +50,35 @@ class RequestHttp {
      */
 
     this.service.interceptors.request.use(
-      (config: AxiosRequestConfig) => {
+      async (config: AxiosRequestConfig) => {
         NProgress.done();
+        const user = JSON.parse(window.localStorage.getItem("userInfo"));
+        console.log(user.userInfo.expires_time, new Date().getTime() / 1000);
+        if (
+          config.url !== "/api/auth/login" &&
+          user.userInfo.expires_time < new Date().getTime() / 1000
+        ) {
+          if (!isRefresh) {
+            isRefresh = true;
+            const { data } = await this._refreshToken();
+            user.userInfo.access_token = data.access_token;
+            user.userInfo.refresh_token = data.refresh_token;
+            user.userInfo.expires_time =
+              data.expires_time + new Date().getTime() / 1000;
+            window.localStorage.setItem("userInfo", JSON.stringify(user));
+            promiseArr.forEach((cb) => {
+              cb();
+            });
+            isRefresh = false;
+            promiseArr = [];
+          }
+          return new Promise((resolve) => {
+            promiseArr.push(
+              resolve(new RequestHttp(allConfig).request(config))
+            );
+          });
+        }
+
         const token =
           JSON.parse(window.localStorage.getItem("userInfo")) === null
             ? null
@@ -91,26 +118,6 @@ class RequestHttp {
       async (error: AxiosError) => {
         this.handleCode(error.response.data);
         if (error.response && error.response.status === 401) {
-          if (!isRefresh) {
-            isRefresh = true;
-            try {
-              await this._refreshToken();
-              isRefresh = false;
-              while (promiseArr.length > 0) {
-                const cb = promiseArr.shift();
-                cb();
-              }
-            } catch (err) {
-              return Promise.reject(err);
-            }
-          }
-          return new Promise((resolve) => {
-            error.config.headers["Authorization"] =
-              "Bearer " +
-              JSON.parse(window.localStorage.getItem("userInfo")).userInfo
-                .refresh_token;
-            promiseArr.push(() => resolve(axios.request(error.response.config)));
-          });
         } else {
           return Promise.reject(error);
         }
@@ -128,34 +135,18 @@ class RequestHttp {
         break;
     }
   }
-  async _refreshToken() {
+  _refreshToken() {
     const user = JSON.parse(window.localStorage.getItem("userInfo"));
-    return new Promise<void>((resolve, reject) => {
-      axios
-        .request({
-          url: "/api/auth/refreshToken",
-          method: "POST",
-          data: {
-            user_name: user.userInfo.user_name,
-            user_id: user.userInfo.user_id,
-          },
-        })
-        .then((res) => {
-          if (user) {
-            const refresh = res.data.data;
-            user.userInfo.access_token = refresh.data.access_token;
-            user.userInfo.refresh_token = refresh.data.refresh_token;
-            window.localStorage.setItem("userInfo", JSON.stringify(user));
-            resolve();
-          } else {
-            return new Error("get token is null");
-          }
-        })
-        .catch((err) => {
-          router.push({ name: "login" });
-          reject(err);
-        });
-    });
+    const userConf = {
+      url: "/api/auth/refreshToken",
+      method: "POST",
+      data: {
+        user_name: user.userInfo.user_name,
+        user_id: user.userInfo.user_id,
+      },
+    };
+    window.localStorage.setItem("userInfo", JSON.stringify(user));
+    return new RequestHttp(allConfig).request<any>(userConf);
   }
   // 常用方法封装
   get<T>(url: string, params?: object): Promise<ResultData<T>> {
@@ -174,7 +165,11 @@ class RequestHttp {
     NProgress.start();
     return this.service.delete(url, { params });
   }
+  request<T>(config: object): Promise<ResultData<T>> {
+    NProgress.start();
+    return this.service.request(config);
+  }
 }
 
 // 导出一个实例对象
-export default new RequestHttp(config);
+export default new RequestHttp(allConfig);
