@@ -27,10 +27,11 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       AutoImport({
         imports: ["vue", "vue-router", "pinia"],
         resolvers: [ElementPlusResolver()],
-        dts: "auto-imports.d.ts",
+        dts: './types/auto-imports.d.ts',
       }),
       Components({
         resolvers: [ElementPlusResolver()],
+        dts: './types/auto-imports.d.ts',
       }),
       viteCompression({
         verbose: true,

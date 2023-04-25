@@ -5,5 +5,5 @@ export const getList: any = (params) => {
 };
 
 export const getGroupKv: any = () => {
-  return axios.get<any>("/api/group/getGroupKv");
+  return axios.get<any>({url: "/api/group/getGroupKv"});
 };
