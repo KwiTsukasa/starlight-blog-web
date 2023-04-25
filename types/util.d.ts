@@ -1,4 +1,4 @@
-interface Kv<T> {
+declare interface Kv<T> {
   label: string;
   value: T;
 }

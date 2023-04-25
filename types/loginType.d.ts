@@ -1,9 +1,9 @@
-interface LoginForm {
+declare interface LoginForm {
   username: string;
   password: string;
 }
 
-interface RegisterForm {
+declare interface RegisterForm {
   username: string;
   useremail: string;
   password: string;

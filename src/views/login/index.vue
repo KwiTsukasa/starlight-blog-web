@@ -21,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import { ElTabs, ElTabPane } from "element-plus";
 import userLogin from "./userLogin.vue";
 import userRegister from "./userRegister.vue";
 const activeName = ref<string>("user");

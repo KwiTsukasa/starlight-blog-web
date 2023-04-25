@@ -31,7 +31,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       }),
       Components({
         resolvers: [ElementPlusResolver()],
-        dts: './types/auto-imports.d.ts',
+        dts: './types/components.d.ts',
       }),
       viteCompression({
         verbose: true,

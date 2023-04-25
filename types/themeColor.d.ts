@@ -1,4 +1,4 @@
-interface ThemeColorInterface {
+declare interface ThemeColorInterface {
   "--R": number;
   "--G": number;
   "--B": number;
@@ -9,6 +9,6 @@ interface ThemeColorInterface {
   "--el-color-primary": string;
 }
 
-interface ElMixinColor {
+declare interface ElMixinColor {
   [elMixinName: string]: string;
 }
