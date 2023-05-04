@@ -9,22 +9,23 @@
         </div>
         <div class="login-type">
           <el-tabs v-model="activeName">
-            <el-tab-pane label="密码登陆" name="user"></el-tab-pane>
-            <el-tab-pane label="账号注册" name="iphone"></el-tab-pane>
+            <el-tab-pane label="密码登陆" name="user" />
+            <el-tab-pane label="账号注册" name="iphone" />
           </el-tabs>
         </div>
-        <user-login v-if="activeName === 'user'"></user-login>
-        <user-register v-else></user-register>
+        <user-login v-if="activeName === 'user'" />
+        <user-register v-else />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import userLogin from "./userLogin.vue";
-import userRegister from "./userRegister.vue";
-const activeName = ref<string>("user");
+  import userLogin from './userLogin.vue';
+  import userRegister from './userRegister.vue';
+  const activeName = ref<string>('user');
 </script>
+
 <style lang="scss">
-@import "@/styles/login.scss";
+  @import '@/styles/login.scss';
 </style>

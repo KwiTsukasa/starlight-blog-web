@@ -1,13 +1,13 @@
 const config: {
   base_url: {
-    base: string
-    dev: string
-    pro: string
-    test: string
-  }
-  result_code: number | string
-  default_headers: AxiosHeaders
-  request_timeout: number
+    base: string;
+    dev: string;
+    pro: string;
+    test: string;
+  };
+  result_code: number | string;
+  default_headers: AxiosHeaders;
+  request_timeout: number;
 } = {
   /**
    * api请求基础路径
@@ -23,13 +23,13 @@ const config: {
     pro: '',
 
     // 打包测试环境接口前缀
-    test: ''
+    test: '',
   },
 
   /**
    * 接口成功返回状态码
    */
-  result_code: '0000',
+  result_code: 200,
 
   /**
    * 接口请求超时时间
@@ -40,7 +40,7 @@ const config: {
    * 默认接口请求类型
    * 可选值：application/x-www-form-urlencoded multipart/form-data
    */
-  default_headers: 'application/json'
-}
+  default_headers: 'application/json',
+};
 
-export { config }
+export { config };

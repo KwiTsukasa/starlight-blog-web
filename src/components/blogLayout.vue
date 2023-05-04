@@ -1,14 +1,7 @@
 <template>
-  <Layout
-    @scroll="scro1lChange"
-    :style="{ ...theme, ...elMixin }"
-    class="variable"
-  >
+  <Layout @scroll="scro1lChange" :style="{ ...theme, ...elMixin }" class="variable">
     <header-bar ref="headerBarRef">
-      <top-box
-        v-model:drawer-visible="drawerVisible"
-        v-model:name="userInfo.user_name"
-      />
+      <top-box v-model:drawer-visible="drawerVisible" v-model:name="userInfo.user_name" />
       <top-seacrch-input
         v-model:value="topSearch"
         v-model:visible="topSearchActive"
@@ -19,9 +12,7 @@
     <blog-container>
       <blog-container-main
         :class="
-          router.currentRoute.value.path.indexOf('/home/work-space') !== -1
-            ? 'work-main'
-            : ''
+          router.currentRoute.value.path.indexOf('/home/work-space') !== -1 ? 'work-main' : ''
         "
       >
         <router-view v-slot="{ Component }">
@@ -32,9 +23,7 @@
       <aside-container
         ref="asideInfoRef"
         :class="
-          router.currentRoute.value.path.indexOf('/home/work-space') !== -1
-            ? 'work-aside'
-            : ''
+          router.currentRoute.value.path.indexOf('/home/work-space') !== -1 ? 'work-aside' : ''
         "
       >
         <aside-title
@@ -43,22 +32,15 @@
           v-model:value="leftSearch"
           v-model:visible="leftSearchActive"
         />
-        <aside-info> </aside-info>
+        <aside-info />
       </aside-container>
     </blog-container>
-    <el-backtop
-      :right="50"
-      :bottom="150"
-      :target="'.' + classSetting.themeModel"
-    >
+    <el-backtop :right="50" :bottom="150" :target="'.' + classSetting.themeModel">
       <div class="flot-box backtop">
         <el-icon><ArrowUpBold /></el-icon>
       </div>
     </el-backtop>
-    <el-button
-      class="float-box plus-blog"
-      @click="router.push({ name: 'editorBlog' })"
-    >
+    <el-button class="float-box plus-blog" @click="router.push({ name: 'editorBlog' })">
       <el-icon color="$primary">
         <svg width="30" height="30" viewBox="0 0 48 48">
           <path
@@ -76,10 +58,7 @@
       :teleported="false"
     >
       <template #reference>
-        <el-button
-          class="float-box theme-change"
-          @click="settingVisible = !settingVisible"
-        >
+        <el-button class="float-box theme-change" @click="settingVisible = !settingVisible">
           <el-icon color="$primary">
             <svg width="20" height="20" viewBox="0 0 48 48">
               <path
@@ -114,11 +93,7 @@
           <el-radio-group
             v-model="classSetting.font"
             @change="changeFont"
-            :class="
-              classSetting.themeModel === 'light-container'
-                ? 'light-p'
-                : 'dark-p'
-            "
+            :class="classSetting.themeModel === 'light-container' ? 'light-p' : 'dark-p'"
           >
             <el-radio-button label="Comfortaa" />
             <el-radio-button label="Helvetica" />
@@ -166,242 +141,239 @@
 </template>
 
 <script setup lang="ts">
-import { Sunny, Moon } from "@element-plus/icons-vue";
-import { useUserStore, useThemeStore } from "@/store";
-import { ColorPickerInstance } from "element-plus";
-import Theme from "@/util/theme";
-import { debounce } from "lodash";
-import { router } from "@/router";
+  import { Sunny, Moon } from '@element-plus/icons-vue';
+  import { useUserStore, useThemeStore } from '@/store';
+  import { ColorPickerInstance } from 'element-plus';
+  import Theme from '@/util/theme';
+  import { debounce } from 'lodash';
+  import { router } from '@/router';
 
-const userStore = useUserStore();
-const { userInfo } = storeToRefs(userStore);
+  const userStore = useUserStore();
+  const { userInfo } = storeToRefs(userStore);
 
-const headerBarRef = ref(null);
-const asideInfoRef = ref(null);
-const oldScrollTop = ref<number>(0);
+  const headerBarRef = ref<any>(null);
+  const asideInfoRef = ref<any>(null);
+  const oldScrollTop = ref<number>(0);
 
-const backgroundColor = (scrollTop: number) => {
-  const opctiy = scrollTop * 0.0013;
-  if (classSetting.value.themeModel === "light-container") {
-    return (
-      "rgba(var(--R), var(--G), var(--B)," +
-      (opctiy > 0.58 ? 0.58 : opctiy) +
-      ")"
-    );
-  } else {
-    return (
-      "rgba(calc(30 * 0.9 + var(--R) * (1 - 0.9)),calc(30 * 0.9 + var(--G) * (1 - 0.9)),calc(30 * 0.9 + var(--B) * (1 - 0.9))," +
-      (opctiy > 0.58 ? 0.58 : opctiy) +
-      ")"
-    );
-  }
-};
-
-const scro1lChange = (e) => {
-  let scrollTop = e.srcElement.scrollTop;
-  let headerStyle = headerBarRef.value.$el.style;
-  let asideInfoStyle = asideInfoRef.value.$el.style;
-  headerStyle.backgroundColor = backgroundColor(scrollTop);
-  headerStyle.backdropFilter = "blur(16px)";
-  if (scrollTop === 0) {
-    headerStyle.backdropFilter = "blur(1px)";
-  } else if (oldScrollTop.value > scrollTop) {
-    headerStyle.top = "0";
-    asideInfoStyle.top = "-197px";
-  } else if (scrollTop > 600) {
-    headerStyle.top = "-54px";
-    asideInfoStyle.top = "-251px";
-  }
-  oldScrollTop.value = scrollTop;
-};
-
-const topSearch = ref<string>("");
-const topSearchActive = ref<boolean>(false);
-const drawerVisible = ref<boolean>(false);
-const leftSearch = ref<string>("");
-const leftSearchActive = ref<boolean>(false);
-const searchBlog = () => {
-  console.log(topSearch.value);
-};
-
-const settingVisible = ref<boolean>(false);
-const colorPicker = ref<ColorPickerInstance>();
-const themeStore = useThemeStore();
-const { classSetting } = storeToRefs(themeStore);
-const theme = ref<ThemeColorInterface>({
-  "--R": 94,
-  "--G": 114,
-  "--B": 228,
-  "--H": 231,
-  "--S": 71,
-  "--L": 63,
-  "--theme-font": `"Comfortaa", "Helvetica Neue", Helvetica, "PingFang SC",
-    "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif`,
-  "--el-color-primary": "#5e72e4",
-});
-const predefineColors = ref([
-  "#ff4500",
-  "#ff8c00",
-  "#ffd700",
-  "#90ee90",
-  "#00ced1",
-  "#1e90ff",
-  "#c71585",
-]);
-const elMixin = ref<ElMixinColor>({});
-
-const changeHeaderTheme = () => {
-  if (classSetting.value.themeModel === "dark-container") {
-    import("element-plus/theme-chalk/dark/css-vars.css");
-    document.querySelector("html").setAttribute("class", "theme dark");
-  } else {
-    document.querySelector("html").setAttribute("class", "theme");
-  }
-  if (headerBarRef.value) {
-    let headerStyle = headerBarRef.value.$el.style;
-    headerStyle.backgroundColor = backgroundColor(oldScrollTop.value);
-  }
-};
-const changeFont = (val: string) => {
-  if (val === "Comfortaa") {
-    Theme.changeFont(
-      `"Comfortaa", "Helvetica Neue", Helvetica, "PingFang SC",
-      "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif`,
-      theme.value
-    );
-  } else {
-    Theme.changeFont(
-      `"Helvetica Neue", Helvetica, "PingFang SC",
-      "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif`,
-      theme.value
-    );
-  }
-};
-
-const changeThemeColor = debounce(
-  (color: string) => {
-    classSetting.value.themeColor = color;
-    Theme.changeTheme(color, theme.value, elMixin.value);
-    changeHeaderTheme();
-  },
-  1,
-  {
-    leading: true,
-    trailing: false,
-  }
-);
-
-changeThemeColor(classSetting.value.themeColor);
-changeFont(classSetting.value.font);
-
-watch(
-  () => classSetting.value.themeColor,
-  (newVal) => {
-    if (newVal === "" || newVal === null || newVal === undefined) {
-      themeStore.setDefaultTheme();
-      changeThemeColor(classSetting.value.themeColor);
+  const backgroundColor = (scrollTop: number) => {
+    const opctiy = scrollTop * 0.0013;
+    if (classSetting.value.themeModel === 'light-container') {
+      return 'rgba(var(--R), var(--G), var(--B),' + (opctiy > 0.58 ? 0.58 : opctiy) + ')';
+    } else {
+      return (
+        'rgba(calc(30 * 0.9 + var(--R) * (1 - 0.9)),calc(30 * 0.9 + var(--G) * (1 - 0.9)),calc(30 * 0.9 + var(--B) * (1 - 0.9)),' +
+        (opctiy > 0.58 ? 0.58 : opctiy) +
+        ')'
+      );
     }
-  }
-);
+  };
+
+  const scro1lChange = (e) => {
+    let scrollTop = e.srcElement.scrollTop;
+    let headerStyle = headerBarRef.value.$el.style;
+    let asideInfoStyle = asideInfoRef.value.$el.style;
+    headerStyle.backgroundColor = backgroundColor(scrollTop);
+    headerStyle.backdropFilter = 'blur(16px)';
+    if (scrollTop === 0) {
+      headerStyle.backdropFilter = 'blur(1px)';
+    } else if (oldScrollTop.value > scrollTop) {
+      headerStyle.top = '0';
+      asideInfoStyle.top = '-197px';
+    } else if (scrollTop > 600) {
+      headerStyle.top = '-54px';
+      asideInfoStyle.top = '-251px';
+    }
+    oldScrollTop.value = scrollTop;
+  };
+
+  const topSearch = ref<string>('');
+  const topSearchActive = ref<boolean>(false);
+  const drawerVisible = ref<boolean>(false);
+  const leftSearch = ref<string>('');
+  const leftSearchActive = ref<boolean>(false);
+  const searchBlog = () => {
+    console.log(topSearch.value);
+  };
+
+  const settingVisible = ref<boolean>(false);
+  const colorPicker = ref<ColorPickerInstance>();
+  const themeStore = useThemeStore();
+  const { classSetting } = storeToRefs(themeStore);
+  const theme = ref<ThemeColorInterface>({
+    '--R': 94,
+    '--G': 114,
+    '--B': 228,
+    '--H': 231,
+    '--S': 71,
+    '--L': 63,
+    '--theme-font': `"Comfortaa", "Helvetica Neue", Helvetica, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif`,
+    '--el-color-primary': '#5e72e4',
+  });
+  const predefineColors = ref([
+    '#ff4500',
+    '#ff8c00',
+    '#ffd700',
+    '#90ee90',
+    '#00ced1',
+    '#1e90ff',
+    '#c71585',
+  ]);
+  const elMixin = ref<ElMixinColor>({});
+
+  const changeHeaderTheme = () => {
+    const element = document.querySelector('html');
+    if (classSetting.value.themeModel === 'dark-container') {
+      import('element-plus/theme-chalk/dark/css-vars.css');
+      if (element) element.setAttribute('class', 'theme dark');
+    } else {
+      if (element) element.setAttribute('class', 'theme');
+    }
+    if (headerBarRef.value) {
+      let headerStyle = headerBarRef.value.$el.style;
+      headerStyle.backgroundColor = backgroundColor(oldScrollTop.value);
+    }
+  };
+  const changeFont = (val: string) => {
+    if (val === 'Comfortaa') {
+      Theme.changeFont(
+        `"Comfortaa", "Helvetica Neue", Helvetica, "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif`,
+        theme.value,
+      );
+    } else {
+      Theme.changeFont(
+        `"Helvetica Neue", Helvetica, "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif`,
+        theme.value,
+      );
+    }
+  };
+
+  const changeThemeColor = debounce(
+    (color: string) => {
+      classSetting.value.themeColor = color;
+      Theme.changeTheme(color, theme.value, elMixin.value);
+      changeHeaderTheme();
+    },
+    1,
+    {
+      leading: true,
+      trailing: false,
+    },
+  );
+
+  changeThemeColor(classSetting.value.themeColor);
+  changeFont(classSetting.value.font);
+
+  watch(
+    () => classSetting.value.themeColor,
+    (newVal) => {
+      if (newVal === '' || newVal === null || newVal === undefined) {
+        themeStore.setDefaultTheme();
+        changeThemeColor(classSetting.value.themeColor);
+      }
+    },
+  );
 </script>
 <style lang="scss">
-.light-p {
-  border-radius: $theme-border-radius;
-  overflow: hidden;
-  border: $primary-border;
-  background-color: transparent !important;
-  .el-radio-button,
-  .el-radio-button__inner {
-    border: none !important;
+  .light-p {
+    border-radius: $theme-border-radius;
+    overflow: hidden;
+    border: $primary-border;
     background-color: transparent !important;
+    .el-radio-button,
+    .el-radio-button__inner {
+      border: none !important;
+      background-color: transparent !important;
+    }
+    .is-active {
+      background-color: $primary !important;
+    }
   }
-  .is-active {
-    background-color: $primary !important;
-  }
-}
 
-.dark-p {
-  border-radius: $theme-border-radius;
-  overflow: hidden;
-  border: $primary-border;
-  background-color: transparent !important;
-  .el-radio-button,
-  .el-radio-button__inner {
-    border: none !important;
+  .dark-p {
+    border-radius: $theme-border-radius;
+    overflow: hidden;
+    border: $primary-border;
     background-color: transparent !important;
+    .el-radio-button,
+    .el-radio-button__inner {
+      border: none !important;
+      background-color: transparent !important;
+    }
+    .is-active {
+      background-color: $primary !important;
+    }
   }
-  .is-active {
-    background-color: $primary !important;
-  }
-}
 </style>
 
 <style lang="scss" scoped>
-@media screen and (min-width: 1451px) {
-  ::v-deep(.el-backtop) {
-    right: 50px;
+  @media screen and (min-width: 1451px) {
+    ::v-deep(.el-backtop) {
+      right: 50px;
+    }
+    .theme-change {
+      animation: float-right-visible 0.5s forwards;
+    }
+    .plus-blog {
+      animation: float-right-visible 0.5s forwards;
+    }
   }
-  .theme-change {
-    animation: float-right-visible 0.5s forwards;
+  @media screen and (max-width: 1450px) {
+    ::v-deep(.el-backtop) {
+      left: 50px;
+    }
+    .theme-change {
+      animation: float-left-visible 0.5s forwards;
+    }
+    .plus-blog {
+      animation: float-left-visible 0.5s forwards;
+    }
   }
-  .plus-blog {
-    animation: float-right-visible 0.5s forwards;
+  @media screen and (max-width: 900px) {
+    ::v-deep(.el-backtop) {
+      left: unset;
+      right: 50px;
+    }
+    .theme-change {
+      animation: float-hidden 0.5s forwards;
+    }
+    .plus-blog {
+      animation: float-hidden 0.5s forwards;
+    }
   }
-}
-@media screen and (max-width: 1450px) {
-  ::v-deep(.el-backtop) {
-    left: 50px;
-  }
-  .theme-change {
-    animation: float-left-visible 0.5s forwards;
-  }
-  .plus-blog {
-    animation: float-left-visible 0.5s forwards;
-  }
-}
-@media screen and (max-width: 900px) {
-  ::v-deep(.el-backtop) {
-    left: unset;
-    right: 50px;
-  }
-  .theme-change {
-    animation: float-hidden 0.5s forwards;
-  }
-  .plus-blog {
-    animation: float-hidden 0.5s forwards;
-  }
-}
-.pop-content {
-  width: fit-content;
-  height: fit-content;
-  .pop-row {
+  .pop-content {
     width: fit-content;
-    height: 40px;
-    display: flex;
-    align-items: center;
+    height: fit-content;
+    .pop-row {
+      width: fit-content;
+      height: 40px;
+      display: flex;
+      align-items: center;
+    }
   }
-}
 
-.theme-change {
-  position: fixed;
-  bottom: 50px;
-  right: 50px;
-}
+  .theme-change {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+  }
 
-.plus-blog {
-  position: fixed;
-  bottom: 100px;
-  right: 50px;
-}
+  .plus-blog {
+    position: fixed;
+    bottom: 100px;
+    right: 50px;
+  }
 
-.work-aside-enter-active,
-.work-aside-leave-active {
-  transition: all 0.3s ease-in-out;
-}
+  .work-aside-enter-active,
+  .work-aside-leave-active {
+    transition: all 0.3s ease-in-out;
+  }
 
-.work-aside-enter-from,
-.work-aside-leave-to {
-  width: 0;
-  opacity: 0;
-}
+  .work-aside-enter-from,
+  .work-aside-leave-to {
+    width: 0;
+    opacity: 0;
+  }
 </style>
